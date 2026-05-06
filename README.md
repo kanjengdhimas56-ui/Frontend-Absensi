@@ -1,8 +1,8 @@
-# Admin Absensi — Frontend
+ Absensi — Frontend
 
 Panel admin untuk sistem absensi QR Code.
 
-## Struktur File
+ Struktur File
 
 ```
 admin-absensi/
@@ -18,16 +18,16 @@ admin-absensi/
         └── LogAbsensi.jsx  # Halaman log absensi + filter tanggal
 ```
 
-## Setup & Jalankan
+Setup & Jalankan
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Konfigurasi API
+ Konfigurasi API
 
-Cari komentar `⚙️ Ganti BASE_URL` di dua file ini dan isi dengan URL BE:
+Cari komentar ` Ganti BASE_URL` di dua file ini dan isi dengan URL BE:
 
 - `src/pages/LoginPage.jsx`
 - `src/pages/LogAbsensi.jsx`
@@ -36,10 +36,10 @@ Cari komentar `⚙️ Ganti BASE_URL` di dua file ini dan isi dengan URL BE:
 const BASE_URL = "https://your-api-url.com"; // ← ganti ini
 ```
 
-## Endpoint yang Dibutuhkan dari BE
+ Endpoint yang Dibutuhkan dari BE
 
-### POST /auth/login
-**Request:**
+POST /auth/login
+Request:
 ```json
 { "name": "string", "pin": 1234 }
 ```
@@ -48,8 +48,8 @@ const BASE_URL = "https://your-api-url.com"; // ← ganti ini
 { "token": "jwt_token", "role": "admin" }
 ```
 
-### GET /admin/log-absensi
-**Header:** `Authorization: Bearer <token>`
+ GET /admin/log-absensi
+Header: `Authorization: Bearer <token>`
 
 **Response:**
 ```json
@@ -64,9 +64,9 @@ const BASE_URL = "https://your-api-url.com"; // ← ganti ini
 ]
 ```
 
-> Sesuaikan nama field response (`phone` / `nomor_telepon`, dll) di `LogAbsensi.jsx` baris kolom tabel.
+> Sesuaikan nama field response ( `nomor_telepon`, dll) di `LogAbsensi.jsx` baris kolom tabel.
 
-## Fitur
+Fitur
 
 - Login dengan Nama + PIN, role check (`admin`)
 - Token disimpan di `localStorage` (persist login)
