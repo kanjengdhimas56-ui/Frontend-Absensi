@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// ⚙️ Ganti BASE_URL ini setelah BE siap
 const BASE_URL = "https://your-api-url.com";
 
 export default function LoginPage({ onLogin }) {
@@ -33,7 +32,7 @@ export default function LoginPage({ onLogin }) {
       }
 
       if (data.role !== "admin") {
-        setError("Akses ditolak. Hanya admin yang bisa masuk.");
+        setError("Akses ditolak.");
         return;
       }
 
