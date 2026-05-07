@@ -1,48 +1,53 @@
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const BASE_URL = "https://your-api-url.com";
-
-export default function LoginPage({ onLogin }) {
-  const [form, setForm] = useState({ name: "", pin: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+export default function AuthLogin( { onLogin } ) {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false)
+  // const [error, setError] = useState("");
+  const [form, setForm] = useState({
+    username: "",
+    pin: "",
+    role_id: parseInt()
+  })
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError("");
-  };
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+    //untuk ngecek secara live
+    console.log(e.target.value)
+  }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name, pin: parseInt(form.pin) }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Login gagal. Cek nama & PIN kamu.");
-        return;
-      }
-
-      if (data.role !== "admin") {
-        setError("Akses ditolak.");
-        return;
-      }
-
-      onLogin(data.token);
-    } catch (err) {
-      setError("Tidak bisa menghubungi server. Coba lagi nanti.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setIsLoading(true);
+    axios.post("http://103.247.10.115:3050/api/auth/login", form)
+      .then((res) => {
+        localStorage.setItem("x_token", res.data.token);
+        localStorage.setItem("user_role", res.data.user.role_id);
+        setForm({
+          username: "",
+          pin: "",
+          role_id: parseInt()
+        });
+        // // PANGGIL INI agar state di App.jsx terupdate
+        onLogin(res.data.token, res.data.user.role_id);
+        alert("LOGIN BERHASIL!");
+        if (res.data.user.role_id === 1) {
+          navigate("/admin");
+        } else {
+          navigate("/user");
+        }
+        console.log(res);
+      })
+      .catch(err => {
+        alert("Login Gagal: " + err.response?.data?.message);
+      })
+      .finally(() => setIsLoading(false));
+  }
 
   return (
     <div className="login-wrapper">
@@ -64,10 +69,10 @@ export default function LoginPage({ onLogin }) {
               </span>
               <input
                 type="text"
-                name="name"
+                name="username"
                 className="form-control"
                 placeholder="Masukkan nama lengkap"
-                value={form.name}
+                value={form.username}
                 onChange={handleChange}
                 required
                 autoComplete="off"
@@ -95,19 +100,19 @@ export default function LoginPage({ onLogin }) {
             </div>
           </div>
 
-          {error && (
+          {/* {error && (
             <div className="alert alert-danger py-2 d-flex align-items-center gap-2">
               <i className="bi bi-exclamation-triangle-fill"></i>
               <span>{error}</span>
             </div>
-          )}
+          )} */}
 
           <button
             type="submit"
             className="btn btn-primary w-100 btn-login"
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading ? (
+            {isLoading ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2"></span>
                 Masuk...

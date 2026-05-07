@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
+
+// Ganti BASE_URL ini setelah BE siap
+const BASE_URL = "http://103.247.10.115:3050/api/admin-only/log";
 
 export default function LogAbsensi({ token, onLogout }) {
   const [logs, setLogs] = useState([]);
@@ -13,20 +15,28 @@ export default function LogAbsensi({ token, onLogout }) {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get("http://103.247.10.115:3050/api/admin-only/log", {
+      const res = await fetch(`${BASE_URL}`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
-      setLogs(res.data.data || []);
-      setFiltered(res.data.data || []);
+
+      if (res.status === 401) {
+        onLogout();
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error("Gagal mengambil data log absensi.");
+      }
+
+      const data = await res.json();
+      setLogs(data);
+      setFiltered(data);
       setLastFetch(new Date());
     } catch (err) {
-      if (err.response && err.response.status === 401) {
-        onLogout();
-      } else {
-        setError("Gagal mengambil data.");
-      }
+      setError(err.message || "Terjadi kesalahan saat mengambil data.");
     } finally {
       setLoading(false);
     }
@@ -43,8 +53,8 @@ export default function LogAbsensi({ token, onLogout }) {
       return;
     }
     const result = logs.filter((log) => {
-      if (!log.absen) return false;
-      const logDate = new Date(log.absen).toISOString().split("T")[0];
+      if (!log.timestamp) return false;
+      const logDate = new Date(log.timestamp).toISOString().split("T")[0];
       return logDate === filterDate;
     });
     setFiltered(result);
@@ -212,14 +222,14 @@ export default function LogAbsensi({ token, onLogout }) {
                       <td className="text-center text-muted small">{index + 1}</td>
                       <td>
                         <span className="timestamp-badge">
-                          {formatTimestamp(log.absen)}
+                          {formatTimestamp(log.timestamp)}
                         </span>
                       </td>
-                      <td className="fw-semibold">{log.username || "-"}</td>
-                      <td>{log.no_hp || "-"}</td>
+                      <td className="fw-semibold">{log.name || "-"}</td>
+                      <td>{log.phone || log.nomor_telepon || "-"}</td>
                       <td>
                         <span className="jurusan-badge">
-                          {log.nama_jurusan || "-"}
+                          {log.jurusan || "-"}
                         </span>
                       </td>
                     </tr>
