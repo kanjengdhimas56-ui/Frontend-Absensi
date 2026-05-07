@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import LogAbsensi from "./pages/LogAbsensi";
+import HalamanUser from "./pages/HalamanUser";
 import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
 
 export default function App() {
@@ -28,11 +29,6 @@ export default function App() {
 
   return (
     <div>
-      {/* {token ? (
-            <LogAbsensi token={token} onLogout={handleLogout} />
-          ) : (
-            <LoginPage onLogin={handleLogin} />
-          )} */}
       <Routes>
         <Route path="/" element={!token || role === null ? <LoginPage token={token} onLogin={handleLogin} /> : <Navigate to={role === 1 ? "/admin" : "/user"} />} />
         <Route path="/admin" element={!token || role !== 1 ? <Navigate to="/" /> : <LogAbsensi token={token} onLogout={handleLogout} />} />

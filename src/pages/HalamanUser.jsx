@@ -3,10 +3,6 @@ import { Navigate, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
-// Ganti BASE_URL ini setelah BE siap
-// const BASE_URL = "http://103.247.10.115:3050/api/auth/get-profile";
-// const UPDATE_PIN_URL = "http://103.247.10.115:3050/api/auth/update-pin";
-
 function HalamanUser({ token, onLogout }) {
     const [user, setUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false); // toggle edit pin

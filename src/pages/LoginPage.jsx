@@ -33,7 +33,7 @@ export default function AuthLogin( { onLogin } ) {
           pin: "",
           role_id: parseInt()
         });
-        // // PANGGIL INI agar state di App.jsx terupdate
+        // PANGGIL INI agar state di App.jsx terupdate
         onLogin(res.data.token, res.data.user.role_id);
         alert("LOGIN BERHASIL!");
         if (res.data.user.role_id === 1) {
