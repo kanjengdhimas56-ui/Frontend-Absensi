@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 // Ganti BASE_URL ini setelah BE siap
-const BASE_URL = "https://your-api-url.com";
+const BASE_URL = "http://103.247.10.115:3050";
 
 export default function LogAbsensi({ token, onLogout }) {
   const [logs, setLogs] = useState([]);
@@ -15,7 +15,7 @@ export default function LogAbsensi({ token, onLogout }) {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch(`${BASE_URL}/admin/log-absensi`, {
+      const res = await fetch(`${BASE_URL}/api/admin-only/log`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",

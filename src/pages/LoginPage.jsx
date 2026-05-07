@@ -1,49 +1,84 @@
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const BASE_URL = "https://your-api-url.com";
+// const BASE_URL = "http://103.247.10.115:3050/api/auth/login";
 
-export default function LoginPage({ onLogin }) {
-  const [form, setForm] = useState({ name: "", pin: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+// export default function LoginPage({ onLogin }) {
+//   const [form, setForm] = useState({ name: "", pin: "" });
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState("");
 
+//   const handleChange = (e) => {
+//     setForm({ ...form, [e.target.name]: e.target.value });
+//     setError("");
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
+//     setError("");
+
+//     try {
+//       const res = await fetch(`${BASE_URL}`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ name: form.name, pin: parseInt(form.pin) }),
+//       });
+
+//       const data = await res.json();
+
+//       if (!res.ok) {
+//         setError(data.message || "Login gagal. Cek nama & PIN kamu.");
+//         return;
+//       }
+
+//       if (data.role !== "admin") {
+//         setError("Akses ditolak.");
+//         return;
+//       }
+
+//       onLogin(data.token);
+//     } catch (err) {
+//       setError("Tidak bisa menghubungi server. Coba lagi nanti.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+export default function AuthLogin() {
+  const navigate = useNavigate();
+  //mendefinisikan nilai awal state
+  const [isLoading, setIsLoading] = useState(false)
+  const [form, setForm] = useState({
+    username: "",
+    pin: ""
+  })
+  //menyimpan hasil input dari user ke dalam state
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError("");
-  };
-
-  const handleSubmit = async (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+    //untuk ngecek secara live
+    console.log(e.target.value)
+  }
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await fetch(`${BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name, pin: parseInt(form.pin) }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Login gagal. Cek nama & PIN kamu.");
-        return;
-      }
-
-      if (data.role !== "admin") {
-        setError("Akses ditolak.");
-        return;
-      }
-
-      onLogin(data.token);
-    } catch (err) {
-      setError("Tidak bisa menghubungi server. Coba lagi nanti.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
+    setIsLoading(true);
+    axios.post("http://103.247.10.115:3050/api/auth/login", form)
+      .then((res) => {
+        alert("DATA BERHASIL DISIMPAN!")
+        localStorage.setItem("x_token", res.data.token)
+        setForm({
+          username: "",
+          pin: ""
+        })
+        navigate("/admin")
+        console.log(res)
+        setIsLoading(false)
+      })
+  }
+    
   return (
     <div className="login-wrapper">
       <div className="login-card">
@@ -64,10 +99,10 @@ export default function LoginPage({ onLogin }) {
               </span>
               <input
                 type="text"
-                name="name"
+                name="username"
                 className="form-control"
                 placeholder="Masukkan nama lengkap"
-                value={form.name}
+                value={form.username}
                 onChange={handleChange}
                 required
                 autoComplete="off"
@@ -95,19 +130,19 @@ export default function LoginPage({ onLogin }) {
             </div>
           </div>
 
-          {error && (
+          {/* {error && (
             <div className="alert alert-danger py-2 d-flex align-items-center gap-2">
               <i className="bi bi-exclamation-triangle-fill"></i>
               <span>{error}</span>
             </div>
-          )}
+          )} */}
 
           <button
             type="submit"
             className="btn btn-primary w-100 btn-login"
-            disabled={loading}
+            disabled={isLoading}
           >
-            {loading ? (
+            {isLoading ? (
               <>
                 <span className="spinner-border spinner-border-sm me-2"></span>
                 Masuk...
