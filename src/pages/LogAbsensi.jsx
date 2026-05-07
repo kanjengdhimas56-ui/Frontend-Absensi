@@ -32,8 +32,8 @@ export default function LogAbsensi({ token, onLogout }) {
       }
 
       const data = await res.json();
-      setLogs(data);
-      setFiltered(data);
+      setLogs(data.data);
+      setFiltered(data.data);
       setLastFetch(new Date());
     } catch (err) {
       setError(err.message || "Terjadi kesalahan saat mengambil data.");
@@ -53,8 +53,8 @@ export default function LogAbsensi({ token, onLogout }) {
       return;
     }
     const result = logs.filter((log) => {
-      if (!log.timestamp) return false;
-      const logDate = new Date(log.timestamp).toISOString().split("T")[0];
+      if (!log.absen) return false;
+      const logDate = new Date(log.absen).toISOString().split("T")[0];
       return logDate === filterDate;
     });
     setFiltered(result);
@@ -222,14 +222,14 @@ export default function LogAbsensi({ token, onLogout }) {
                       <td className="text-center text-muted small">{index + 1}</td>
                       <td>
                         <span className="timestamp-badge">
-                          {formatTimestamp(log.timestamp)}
+                          {formatTimestamp(log.absen)}
                         </span>
                       </td>
-                      <td className="fw-semibold">{log.name || "-"}</td>
-                      <td>{log.phone || log.nomor_telepon || "-"}</td>
+                      <td className="fw-semibold">{log.username || "-"}</td>
+                      <td>{log.no_hp || log.nomor_telepon || "-"}</td>
                       <td>
                         <span className="jurusan-badge">
-                          {log.jurusan || "-"}
+                          {log.nama_jurusan || "-"}
                         </span>
                       </td>
                     </tr>
