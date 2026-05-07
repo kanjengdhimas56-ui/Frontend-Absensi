@@ -331,7 +331,7 @@ export default function UserHistoryAbsensi() {
 
   // ── Fetch attendance log ──────────────────────────────────────────────────
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("x_token");
     if (!token) {
       setError("Sesi habis. Silakan login kembali.");
       setLoading(false);

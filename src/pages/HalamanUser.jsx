@@ -1,30 +1,30 @@
 import { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
-// Ganti BASE_URL ini setelah BE siap
-const BASE_URL = "https://your-api-url.com";
-
-function HalamanUser({ token }) {
+function HalamanUser({ token, onLogout }) {
     const [user, setUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false); // toggle edit pin
     const [newPin, setNewPin] = useState(""); // nampung input pin baru
     const [showNotif, setShowNotif] = useState(false); // notif yg muncul cmn 3 detik
     const [error, setError] = useState(""); // nampung error dri api
+    const navigate = useNavigate();
 
     // GET DATA USER
     useEffect(() => {
         if (!token) {
             setUser({
-                nama: "-",
-                jurusan: "-",
-                noHp: "-",
+                username: "-",
+                nama_jurusan: "-",
+                no_hp: "-",
                 pin: "-"
             });
             return;
         }
 
         axios
-            .get(`${BASE_URL}/user`, {
+            .get("http://103.247.10.115:3050/api/auth/get-profile", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -55,7 +55,7 @@ function HalamanUser({ token }) {
 
         axios
             .put(
-                `${BASE_URL}/update-pin`,
+                "http://103.247.10.115:3050/api/auth/update-pin",
                 {
                     pin: newPin,
                 },
@@ -122,7 +122,7 @@ function HalamanUser({ token }) {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={user?.nama || ""}
+                                value={user.username || ""}
                                 readOnly
                             />
                         </div>
@@ -137,7 +137,7 @@ function HalamanUser({ token }) {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={user?.jurusan || ""}
+                                value={user.nama_jurusan || ""}
                                 readOnly
                             />
                         </div>
@@ -152,7 +152,7 @@ function HalamanUser({ token }) {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={user?.noHp || ""}
+                                value={user.no_hp || ""}
                                 readOnly
                             />
                         </div>
@@ -169,7 +169,7 @@ function HalamanUser({ token }) {
                             <input
                                 type="text"
                                 className="form-control"
-                                value={user?.pin || ""}
+                                value={user.pin || ""}
                                 readOnly
                             />
                         </div>
@@ -213,11 +213,15 @@ function HalamanUser({ token }) {
                         </div>
                     )}
 
-                    <button className="btn btn-outline-primary w-100">
+                    <button className="btn btn-outline-primary w-100" onClick={() => navigate("/user/history")}>
                         <i className="bi bi-clock-history me-2"></i>
                         Lihat Riwayat Absen
                     </button>
 
+                    <button className="btn btn-outline-danger w-100 mt-2" onClick={onLogout}>
+                        <i className="bi bi-box-arrow-right me-2"></i>
+                        Logout
+                    </button>
                 </div>
             </div>
         </div>
