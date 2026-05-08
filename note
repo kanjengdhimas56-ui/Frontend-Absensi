@@ -1,0 +1,4 @@
+instal react scanner:
+
+npm install --legacy-peer-deps
+npm install react-qr-reader --legacy-peer-deps
