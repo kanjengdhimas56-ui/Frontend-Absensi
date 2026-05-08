@@ -218,6 +218,11 @@ function HalamanUser({ token, onLogout }) {
                         Lihat Riwayat Absen
                     </button>
 
+                    <button className="btn btn-outline-secondary w-100 mt-2" onClick={() => navigate("/user/qr")}>
+                        <i className="bi bi-qr-code-scan me-2"></i>
+                        Tampilkan QR Code
+                    </button>
+
                     <button className="btn btn-outline-danger w-100 mt-2" onClick={onLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>
                         Logout
