@@ -150,8 +150,8 @@ function StatCard({ label, count, status, isActive, onClick }) {
         minWidth: 100,
         padding: "18px 16px",
         borderRadius: 14,
-        border: isActive ? `2px solid ${cfg.color}` : "2px solid rgba(255,255,255,0.07)",
-        background: isActive ? cfg.bg : "rgba(255,255,255,0.04)",
+        border: isActive ? `2px solid ${cfg.color}` : "2px solid rgb(252, 248, 248)",
+        background: isActive ? cfg.bg : "rgb(255, 255, 255)",
         cursor: "pointer",
         textAlign: "left",
         transition: "all 0.2s",
@@ -161,7 +161,7 @@ function StatCard({ label, count, status, isActive, onClick }) {
       <div style={{ color: cfg.color, fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif" }}>
         {count}
       </div>
-      <div style={{ color: "rgba(255,255,255,0.55)", fontSize: 12, marginTop: 3, letterSpacing: "0.04em" }}>
+      <div style={{ color: "rgb(15, 15, 15)", fontSize: 12, marginTop: 3, letterSpacing: "0.04em" }}>
         {cfg.label}
       </div>
     </button>
@@ -185,7 +185,7 @@ function DayDot({ date, logEntry, isToday }) {
         flex: 1,
       }}
     >
-      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: "0.06em" }}>
+      <div style={{ fontSize: 10, color: "rgb(12, 12, 12)", fontWeight: 600, letterSpacing: "0.06em" }}>
         {dayName.slice(0, 3).toUpperCase()}
       </div>
       <div
@@ -207,8 +207,8 @@ function DayDot({ date, logEntry, isToday }) {
             ? "2px solid #60a5fa"
             : cfg
             ? `2px solid ${cfg.border}`
-            : "2px solid rgba(255,255,255,0.09)",
-          color: isToday ? "#fff" : cfg ? cfg.color : isWeekend ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.7)",
+            : "2px solid rgba(56, 54, 54, 0.66)",
+          color: isToday ? "#0c0c0c" : cfg ? cfg.color : isWeekend ? "rgb(5, 5, 5)" : "rgba(14, 13, 13, 0.7)",
         }}
       >
         {dayNum}
@@ -224,8 +224,8 @@ function WarningBanner({ absenDays }) {
     <div
       style={{
         borderRadius: 14,
-        border: "1px solid rgba(239,68,68,0.4)",
-        background: "rgba(239,68,68,0.08)",
+        border: "1px solid rgb(248, 245, 245)",
+        background: "rgb(250, 249, 249)",
         padding: "14px 18px",
         display: "flex",
         gap: 12,
@@ -234,12 +234,12 @@ function WarningBanner({ absenDays }) {
     >
       <span style={{ fontSize: 20, lineHeight: 1 }}>🚨</span>
       <div>
-        <div style={{ color: "#ef4444", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
+        <div style={{ color: "#131212", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
           Peringatan Ketidakhadiran
         </div>
-        <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 12, lineHeight: 1.6 }}>
+        <div style={{ color: "rgb(7, 7, 7)", fontSize: 12, lineHeight: 1.6 }}>
           Kamu tidak hadir pada:{" "}
-          <span style={{ color: "#fca5a5", fontWeight: 600 }}>
+          <span style={{ color: "#0c0c0c", fontWeight: 600 }}>
             {absenDays.map((d) => `${HARI[d.getDay()]}, ${d.getDate()} ${BULAN[d.getMonth()]}`).join(" • ")}
           </span>
           . Segera konfirmasi ke pembimbing jika ada keterangan.
@@ -260,39 +260,39 @@ function RecordRow({ log, index }) {
         alignItems: "center",
         padding: "14px 18px",
         borderRadius: 12,
-        background: isAbsen ? "rgba(239,68,68,0.06)" : "rgba(255,255,255,0.04)",
-        border: isAbsen ? "1px solid rgba(239,68,68,0.2)" : "1px solid rgba(255,255,255,0.06)",
+        background: isAbsen ? "rgb(247, 243, 243)" : "rgb(255, 255, 255)",
+        border: isAbsen ? "1px solid rgb(17, 17, 17)" : "1px solid rgb(15, 15, 15)",
         gap: 14,
         animation: `fadeUp 0.3s ease ${index * 0.04}s both`,
       }}
     >
       {/* Day indicator */}
       <div style={{ minWidth: 44, textAlign: "center" }}>
-        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: "0.06em" }}>
+        <div style={{ fontSize: 10, color: "rgb(17, 17, 17)", fontWeight: 600, letterSpacing: "0.06em" }}>
           {HARI[d.getDay()].slice(0, 3).toUpperCase()}
         </div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: "#e2e8f0", lineHeight: 1, fontFamily: "'Syne', sans-serif" }}>
+        <div style={{ fontSize: 20, fontWeight: 800, color: "#121313", lineHeight: 1, fontFamily: "'Syne', sans-serif" }}>
           {String(d.getDate()).padStart(2, "0")}
         </div>
-        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>
+        <div style={{ fontSize: 10, color: "rgb(14, 13, 13)" }}>
           {BULAN[d.getMonth()].slice(0, 3)}
         </div>
       </div>
 
       {/* Divider */}
-      <div style={{ width: 1, height: 40, background: "rgba(255,255,255,0.1)" }} />
+      <div style={{ width: 1, height: 40, background: "rgb(255, 255, 255)" }} />
 
       {/* Time */}
       <div style={{ minWidth: 68 }}>
         {log.status === "hadir" ? (
           <>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#e2e8f0", fontFamily: "'Syne', sans-serif" }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "#1b1b1b", fontFamily: "'Syne', sans-serif" }}>
               {new Date(log.timestamp).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
             </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.05em" }}>SCAN QR</div>
+            <div style={{ fontSize: 10, color: "rgb(12, 12, 12)", letterSpacing: "0.05em" }}>SCAN QR</div>
           </>
         ) : (
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>—</div>
+          <div style={{ fontSize: 11, color: "rgb(10, 10, 10)", fontStyle: "italic" }}>—</div>
         )}
       </div>
 
@@ -301,7 +301,7 @@ function RecordRow({ log, index }) {
 
       {/* Keterangan */}
       {log.keterangan && (
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", maxWidth: 140, textAlign: "right" }}>
+        <div style={{ fontSize: 11, color: "rgb(8, 8, 8)", maxWidth: 140, textAlign: "right" }}>
           {log.keterangan}
         </div>
       )}
@@ -424,14 +424,14 @@ export default function UserHistoryAbsensi() {
     <>
       {/* ── Google Fonts ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+        @import url('@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
           background: #060d1f;
           min-height: 100vh;
-          font-family: 'DM Sans', sans-serif;
+          font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         @keyframes fadeUp {
@@ -451,7 +451,7 @@ export default function UserHistoryAbsensi() {
           border-color: rgba(37,99,235,0.6) !important;
         }
         .back-btn:hover {
-          background: rgba(255,255,255,0.1) !important;
+          background: rgba(253, 249, 249, 0.1) !important;
         }
       `}</style>
 
@@ -467,16 +467,8 @@ export default function UserHistoryAbsensi() {
         <div style={{
           position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
         }}>
-          <div style={{
-            position: "absolute", top: -120, right: -120,
-            width: 500, height: 500, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%)",
-          }} />
-          <div style={{
-            position: "absolute", bottom: -80, left: -80,
-            width: 400, height: 400, borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(14,165,233,0.08) 0%, transparent 70%)",
-          }} />
+          <div className="login-wrapper" />
+          <div />
         </div>
 
         {/* ── Content ── */}
@@ -489,23 +481,41 @@ export default function UserHistoryAbsensi() {
           {/* ── Header bar ── */}
           <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
             <button
-              className="back-btn"
-              onClick={() => window.history.back()}
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: 10,
-                width: 38, height: 38,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                cursor: "pointer", color: "#e2e8f0", fontSize: 16,
-                transition: "background 0.2s",
-              }}
-            >
-              ←
-            </button>
+  className="back-btn"
+  onClick={() => window.history.back()}
+  onMouseEnter={(e) => {
+    e.currentTarget.style.background = "rgba(255, 255, 255, 0.12)";
+    e.currentTarget.style.transform = "translateX(-3px)";
+    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+  }}
+  onMouseLeave={(e) => {
+    e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+    e.currentTarget.style.transform = "translateX(0)";
+    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+  }}
+  style={{
+    background: "rgba(255, 255, 255, 0.06)",
+    border: "1px solid rgba(255, 255, 255, 0.1)",
+    borderRadius: "12px", // Sedikit lebih bulat agar modern
+    width: 42, // Sedikit lebih besar agar mudah diklik (Fitts's Law)
+    height: 42,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    cursor: "pointer",
+    color: "#ffffff",
+    fontSize: "18px",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Transisi lebih smooth
+    backdropFilter: "blur(10px)", // Efek kaca (Glassmorphism)
+    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+    outline: "none",
+  }}
+>
+  <span style={{ marginTop: "-2px" }}>←</span>
+</button>
             <div style={{ flex: 1 }}>
               <div style={{
-                fontSize: 10, color: "rgba(255,255,255,0.4)",
+                fontSize: 10, color: "rgb(255, 255, 255)",
                 letterSpacing: "0.1em", fontWeight: 600, textTransform: "uppercase",
               }}>
                 ABSENSI OJT BBPVP BEKASI
@@ -518,7 +528,7 @@ export default function UserHistoryAbsensi() {
               </div>
             </div>
             {/* Logo badge */}
-            <div style={{
+            {/* <div style={{
               width: 38, height: 38, borderRadius: 10,
               background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
               display: "flex", alignItems: "center", justifyContent: "center",
@@ -526,7 +536,7 @@ export default function UserHistoryAbsensi() {
               fontSize: 18,
             }}>
               🛡️
-            </div>
+            </div> */}
           </div>
 
           {/* ── Loading ── */}
@@ -539,7 +549,7 @@ export default function UserHistoryAbsensi() {
                 margin: "0 auto 16px",
                 animation: "spin 0.8s linear infinite",
               }} />
-              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 14 }}>Memuat data absensi...</div>
+              <div style={{ color: "rgb(255, 255, 255)", fontSize: 14 }}>Memuat data absensi...</div>
             </div>
           )}
 
@@ -548,7 +558,7 @@ export default function UserHistoryAbsensi() {
             <div style={{
               padding: 24, borderRadius: 14,
               background: "rgba(239,68,68,0.1)",
-              border: "1px solid rgba(239,68,68,0.3)",
+              border: "1px solid rgba(248, 8, 8, 0.3)",
               textAlign: "center", color: "#fca5a5",
             }}>
               {error}
@@ -561,7 +571,7 @@ export default function UserHistoryAbsensi() {
               {/* ── User profile card ── */}
               <div style={{
                 borderRadius: 18,
-                background: "linear-gradient(135deg, rgba(37,99,235,0.25) 0%, rgba(14,165,233,0.12) 100%)",
+                background: "linear-gradient(135deg, rgb(241, 244, 245) 0%, rgb(240, 245, 247) 100%)",
                 border: "1px solid rgba(37,99,235,0.3)",
                 padding: "20px 22px",
                 marginBottom: 20,
@@ -574,7 +584,7 @@ export default function UserHistoryAbsensi() {
                   width: 52, height: 52, borderRadius: 14,
                   background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22, fontWeight: 700, color: "#fff",
+                  fontSize: 22, fontWeight: 700, color: "#0c0c0c",
                   fontFamily: "'Syne', sans-serif",
                   boxShadow: "0 4px 14px rgba(37,99,235,0.45)",
                 }}>
@@ -582,20 +592,20 @@ export default function UserHistoryAbsensi() {
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{
-                    fontSize: 18, fontWeight: 800, color: "#f1f5f9",
+                    fontSize: 18, fontWeight: 800, color: "#050505",
                     fontFamily: "'Syne', sans-serif",
                   }}>
                     {userName}
                   </div>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", marginTop: 2 }}>
+                  <div style={{ fontSize: 12, color: "rgb(8, 8, 8)", marginTop: 2 }}>
                     Peserta OJT · {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: "0.08em" }}>
+                  <div style={{ fontSize: 10, color: "rgb(15, 15, 15)", letterSpacing: "0.08em" }}>
                     HARI INI
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#93c5fd", marginTop: 2 }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "#080808", marginTop: 2 }}>
                     {HARI[today.getDay()]}, {today.getDate()} {BULAN[today.getMonth()]}
                   </div>
                 </div>
@@ -612,12 +622,12 @@ export default function UserHistoryAbsensi() {
                   className="week-btn"
                   onClick={() => setWeekOffset((o) => o - 1)}
                   style={{
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: "rgb(255, 255, 255)",
+                    border: "1px solid rgba(3, 3, 3, 0.1)",
                     borderRadius: 10,
                     width: 36, height: 36,
                     cursor: "pointer",
-                    color: "#e2e8f0", fontSize: 14,
+                    color: "#0c0c0c", fontSize: 20,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s",
                   }}
@@ -628,18 +638,18 @@ export default function UserHistoryAbsensi() {
                 <div style={{
                   flex: 1,
                   textAlign: "center",
-                  background: "rgba(255,255,255,0.04)",
+                  background: "rgb(255, 255, 255)",
                   border: "1px solid rgba(255,255,255,0.08)",
                   borderRadius: 10,
                   padding: "8px 16px",
                 }}>
                   <div style={{
-                    fontSize: 13, fontWeight: 700, color: "#e2e8f0",
+                    fontSize: 13, fontWeight: 700, color: "#0f0f0f",
                     fontFamily: "'Syne', sans-serif",
                   }}>
                     {isCurrentWeek ? "🗓 Minggu Ini" : `Minggu ke-${weekNum}`}
                   </div>
-                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginTop: 1 }}>
+                  <div style={{ fontSize: 11, color: "rgb(8, 8, 8)", marginTop: 1 }}>
                     {formatDate(weekStart)} – {formatDate(weekEnd)}
                   </div>
                 </div>
@@ -649,13 +659,13 @@ export default function UserHistoryAbsensi() {
                   onClick={() => setWeekOffset((o) => Math.min(0, o + 1))}
                   disabled={isCurrentWeek}
                   style={{
-                    background: isCurrentWeek ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.06)",
+                    background: isCurrentWeek ? "rgb(255, 255, 255)" : "rgb(255, 252, 252)",
                     border: "1px solid rgba(255,255,255,0.1)",
                     borderRadius: 10,
                     width: 36, height: 36,
                     cursor: isCurrentWeek ? "not-allowed" : "pointer",
-                    color: isCurrentWeek ? "rgba(255,255,255,0.2)" : "#e2e8f0",
-                    fontSize: 14,
+                    color: isCurrentWeek ? "rgb(250, 247, 247)" : "#0f0f0f",
+                    fontSize: 20,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "all 0.2s",
                   }}
@@ -667,7 +677,7 @@ export default function UserHistoryAbsensi() {
               {/* ── Mini calendar strip ── */}
               <div style={{
                 borderRadius: 16,
-                background: "rgba(255,255,255,0.04)",
+                background: "rgb(255, 255, 255)",
                 border: "1px solid rgba(255,255,255,0.07)",
                 padding: "16px 12px",
                 display: "flex",
@@ -712,7 +722,7 @@ export default function UserHistoryAbsensi() {
                   justifyContent: "space-between",
                   marginBottom: 12,
                 }}>
-                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>
+                  <div style={{ fontSize: 12, color: "rgb(255, 255, 255)" }}>
                     Filter aktif:{" "}
                     <span style={{ color: STATUS[filterStatus].color, fontWeight: 600 }}>
                       {STATUS[filterStatus].label}
@@ -723,7 +733,7 @@ export default function UserHistoryAbsensi() {
                     style={{
                       background: "none",
                       border: "none",
-                      color: "rgba(255,255,255,0.4)",
+                      color: "rgb(255, 255, 255)",
                       cursor: "pointer",
                       fontSize: 12,
                     }}
@@ -736,13 +746,13 @@ export default function UserHistoryAbsensi() {
               {/* ── Records list ── */}
               <div style={{
                 borderRadius: 16,
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
+                background: "rgb(255, 255, 255)",
+                border: "1px solid rgb(8, 8, 8)",
                 overflow: "hidden",
               }}>
                 <div style={{
                   padding: "14px 18px 12px",
-                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  borderBottom: "1px solid rgb(7, 7, 7)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -750,14 +760,14 @@ export default function UserHistoryAbsensi() {
                   <div style={{
                     fontSize: 13,
                     fontWeight: 700,
-                    color: "#e2e8f0",
+                    color: "#0c0c0c",
                     fontFamily: "'Syne', sans-serif",
                   }}>
                     Log Kehadiran
                   </div>
                   <div style={{
                     fontSize: 11,
-                    color: "rgba(255,255,255,0.4)",
+                    color: "rgb(8, 8, 8)",
                   }}>
                     {displayLogs.length} catatan
                   </div>
@@ -768,7 +778,7 @@ export default function UserHistoryAbsensi() {
                     <div style={{
                       textAlign: "center",
                       padding: "40px 20px",
-                      color: "rgba(255,255,255,0.35)",
+                      color: "rgb(255, 255, 255)",
                       fontSize: 13,
                     }}>
                       <div style={{ fontSize: 32, marginBottom: 10 }}>📋</div>
@@ -796,7 +806,7 @@ export default function UserHistoryAbsensi() {
                       width: 8, height: 8, borderRadius: "50%",
                       background: cfg.color,
                     }} />
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>
+                    <span style={{ fontSize: 11, color: "rgb(255, 255, 255)" }}>
                       {cfg.label}
                     </span>
                   </div>
