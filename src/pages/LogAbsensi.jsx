@@ -79,7 +79,7 @@ export default function LogAbsensi({ token, onLogout }) {
           )}
 
           <button
-            className="btn btn-warning btn-sm d-flex align-items-center gap-1"
+            className="btn btn-outline-warning btn-sm d-flex align-items-center gap-1"
             onClick={() => navigate("/scanner")}
             title="Buka Scanner QR"
           >
@@ -127,7 +127,7 @@ export default function LogAbsensi({ token, onLogout }) {
 
             <div className="stat-badge">
               <i className="bi bi-people-fill me-1"></i>
-              <span>{filtered.length} Anomaly😂</span>
+              <span style={{ color: "rgba(255, 255, 255, 0.85)" }}>{filtered.length} User</span>
               {filterDate && <span style={{ color: "#fbbf24" }}> (difilter)</span>}
             </div>
           </div>
@@ -150,6 +150,7 @@ export default function LogAbsensi({ token, onLogout }) {
             {filterDate && (
               <button
                 className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
+                style={{ borderColor: "rgba(0, 0, 0, 0.085)", color: "rgba(0, 0, 0, 0.5)" }}
                 onClick={clearFilter}
               >
                 <i className="bi bi-x-circle"></i>
@@ -158,9 +159,9 @@ export default function LogAbsensi({ token, onLogout }) {
             )}
           </div>
           {filterDate && (
-            <div className="mt-2 small" style={{ color: "rgba(255,255,255,0.5)" }}>
+            <div className="mt-2 small">
               Menampilkan absensi tanggal{" "}
-              <strong style={{ color: "rgba(255,255,255,0.85)" }}>
+              <strong style={{ color: "#60a5fad7" }}>
                 {new Date(filterDate).toLocaleDateString("id-ID", {
                   weekday: "long",
                   year: "numeric",
@@ -188,12 +189,12 @@ export default function LogAbsensi({ token, onLogout }) {
           {loading ? (
             <div className="loading-state">
               <div className="spinner-border text-light" role="status"></div>
-              <p className="mt-3" style={{ color: "rgba(255,255,255,0.4)" }}>Memuat data...</p>
+              <p className="mt-3" style={{ color: "rgba(0, 0, 0, 0.4)" }}>Memuat data...</p>
             </div>
           ) : filtered.length === 0 ? (
             <div className="empty-state">
-              <i className="bi bi-inbox display-4" style={{ color: "rgba(255,255,255,0.3)" }}></i>
-              <p className="mt-3" style={{ color: "rgba(255,255,255,0.4)" }}>
+              <i className="bi bi-inbox display-4" style={{ color: "rgba(0, 0, 0, 0.3)" }}></i>
+              <p className="mt-3" style={{ color: "rgba(0, 0, 0, 0.4)" }}>
                 {filterDate
                   ? "Tidak ada data absensi pada tanggal ini."
                   : "Belum ada data absensi."}
@@ -219,19 +220,15 @@ export default function LogAbsensi({ token, onLogout }) {
                 <tbody>
                   {filtered.map((log, index) => (
                     <tr key={log.id || index}>
-                      <td className="text-center small" style={{ color: "rgba(255,255,255,0.35)" }}>{index + 1}</td>
+                      <td className="text-center small" style={{ color: "rgba(0, 0, 0, 0.85)" }}>{index + 1}</td>
                       <td>
                         <span className="timestamp-badge">
                           {formatTimestamp(log.absen)}
                         </span>
                       </td>
-                      <td className="fw-semibold">{log.username || "-"}</td>
-                      <td>{log.no_hp || "-"}</td>
-                      <td>
-                        <span className="jurusan-badge">
-                          {log.nama_jurusan || "-"}
-                        </span>
-                      </td>
+                      <td style={{ color: "rgba(0, 0, 0, 1)" }}>{log.username || "-"}</td>
+                      <td style={{ color: "rgba(0, 0, 0, 0.75)" }}>{log.no_hp || "-"}</td>
+                      <td style={{ color: "rgba(0, 0, 0, 0.75)" }}>{log.nama_jurusan || "-"}</td>
                     </tr>
                   ))}
                 </tbody>

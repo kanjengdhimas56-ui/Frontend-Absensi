@@ -9,17 +9,10 @@ export default function QrUser() {
   const BASE_URL = "http://103.247.10.115:3050/api/kode-qr/qr";
   const USER_URL = "http://103.247.10.115:3050/api/auth/get-profile";
   const IZIN_URL = "http://103.247.10.115:3050/api/user-akses/izin";
-
   const MySwal = withReactContent(SweetAlert2);
-
   const token = localStorage.getItem("x_token");
-
-  const [form, setForm] = useState({
-    username: "",
-  });
-
+  const [form, setForm] = useState({ username: "" });
   const [qrData, setQrData] = useState("");
-
   const navigate = useNavigate();
 
   // GET PROFILE + QR
@@ -31,10 +24,10 @@ export default function QrUser() {
 
     // GET PROFILE
     axios.get(USER_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         if (res.data && res.data.user) {
           setForm(res.data.user);
@@ -46,10 +39,10 @@ export default function QrUser() {
 
     // GET QR
     axios.get(BASE_URL, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then((res) => {
         console.log("QR RESPONSE:", res.data);
 
@@ -75,7 +68,7 @@ export default function QrUser() {
       confirmButtonText: "Izin",
       denyButtonText: "Sakit",
       cancelButtonText: "Batal",
-      confirmButtonColor: "#3085d6",
+      confirmButtonColor: "#f39c12",
       denyButtonColor: "#f39c12",
     }).then((result) => {
       let status = "";
@@ -168,8 +161,8 @@ export default function QrUser() {
           className="btn btn-outline-warning w-100"
           onClick={handleIzin}
         >
-          <i className="bi bi-calendar-x"></i>{" "}
           Keterangan Izin / Sakit
+          <i className="bi bi-calendar-x ms-2"></i>{" "}
         </button>
 
         <button
