@@ -30,7 +30,7 @@ body {
   color: var(--text);
 }
 
-/* ===== LOGIN PAGE ===== */
+/* LOGIN PAGE*/
 .login-wrapper {
   min-height: 100vh;
   display: flex;
@@ -154,7 +154,7 @@ body {
   transform: translateY(0);
 }
 
-/* ===== DASHBOARD ===== */
+/*  DASHBOARD  */
 .dashboard-wrapper {
   min-height: 100vh;
   background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
@@ -247,7 +247,7 @@ body {
   color: rgba(255,255,255,0.85);
 }
 
-/* ===== FILTER CARD ===== */
+/*  FILTER CARD  */
 .filter-card {
   background: rgba(255,255,255,0.07);
   backdrop-filter: blur(10px);
@@ -289,7 +289,7 @@ body {
   color: rgba(255,255,255,0.85);
 }
 
-/* ===== TABLE CARD ===== */
+/*  TABLE CARD  */
 .table-card {
   background: rgba(255,255,255,0.07);
   backdrop-filter: blur(10px);
@@ -368,7 +368,7 @@ body {
   color: rgba(255,255,255,0.4) !important;
 }
 
-/* ===== STATES ===== */
+/* STATES */
 .loading-state,
 .empty-state {
   display: flex;
@@ -379,7 +379,7 @@ body {
   text-align: center;
 }
 
-/* ===== ANIMATIONS ===== */
+/* ANIMATIONS */
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -390,7 +390,7 @@ body {
   display: inline-block;
 }
 
-/* ===== RESPONSIVE ===== */
+/* RESPONSIVE  */
 @media (max-width: 576px) {
   .login-card {
     padding: 2rem 1.5rem;
@@ -403,4 +403,39 @@ body {
   .table tbody td {
     padding: 0.75rem 1rem;
   }
+}
+
+/*  QR */
+.qr-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 320px;
+  text-align: center;
+}
+.qr-card .qr-code {
+  display: inline-block;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #f8fafc;
+}
+.qr-card .qr-instruction {
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.qr-card .qr-instruction strong {
+  color: var(--primary);
+  font-weight: 600;
+}
+.qr-card .qr-instruction .highlight {
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 600;
 }
