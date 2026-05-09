@@ -6,6 +6,7 @@ import LogAbsensi from "./pages/LogAbsensi";
 import HalamanUser from "./pages/HalamanUser";
 import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
 import QrUser from "./pages/QrUser";
+import ScannerQr from "./pages/ScannerQr";
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("x_token") || null);
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/user" element={!token || role !== 2 ? <Navigate to="/" /> : <HalamanUser token={token} onLogout={handleLogout} />} />
         <Route path="/user/history" element={!token || role !== 2 ? <Navigate to="/" /> : <UserHistoryAbsensi token={token} />} />
         <Route path="/user/qr" element={!token || role !== 2 ? <Navigate to="/" /> : <QrUser token={token} />} />
+        <Route path="/scanner" element={!token || role !== 1 ? <Navigate to="/" /> : <ScannerQr token={token} />} />
       </Routes>
     </div>
   );

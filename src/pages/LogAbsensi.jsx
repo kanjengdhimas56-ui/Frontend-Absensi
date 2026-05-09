@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function LogAbsensi({ token, onLogout }) {
@@ -8,6 +9,8 @@ export default function LogAbsensi({ token, onLogout }) {
   const [error, setError] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [lastFetch, setLastFetch] = useState(null);
+
+  const navigate = useNavigate();
 
   const fetchLogs = useCallback(async () => {
     setLoading(true);
@@ -74,6 +77,16 @@ export default function LogAbsensi({ token, onLogout }) {
               Update: {lastFetch.toLocaleTimeString("id-ID")}
             </span>
           )}
+
+          <button
+            className="btn btn-warning btn-sm d-flex align-items-center gap-1"
+            onClick={() => navigate("/scanner")}
+            title="Buka Scanner QR"
+          >
+            <i className="bi bi-qr-code-scan"></i>
+            <span className="d-none d-md-inline">Scanner</span>
+          </button>
+
           <button
             className="btn btn-outline-light btn-sm d-flex align-items-center gap-1"
             onClick={fetchLogs}
@@ -93,9 +106,7 @@ export default function LogAbsensi({ token, onLogout }) {
         </div>
       </nav>
 
-      {/* Main Content */}
       <div className="dashboard-content container-fluid px-4 py-4">
-        {/* Header */}
         <div className="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
           <div>
             <h2 className="page-title mb-1">Log Absensi</h2>
@@ -103,7 +114,17 @@ export default function LogAbsensi({ token, onLogout }) {
               Menampilkan seluruh data kehadiran
             </p>
           </div>
+
+          {/* Stats Badge */}
           <div className="d-flex gap-2">
+            <button
+              className="btn btn-warning d-flex align-items-center gap-2"
+              onClick={() => navigate("/scanner")}
+            >
+              <i className="bi bi-qr-code-scan"></i>
+              Buka Scanner
+            </button>
+
             <div className="stat-badge">
               <i className="bi bi-people-fill me-1"></i>
               <span>{filtered.length} Anomaly😂</span>
@@ -178,7 +199,7 @@ export default function LogAbsensi({ token, onLogout }) {
                   : "Belum ada data absensi."}
               </p>
               {filterDate && (
-                <button className="btn btn-sm btn-outline-light" onClick={clearFilter}>
+                <button className="btn btn-sm btn-outline-primary" onClick={clearFilter}>
                   Tampilkan Semua
                 </button>
               )}
@@ -219,6 +240,37 @@ export default function LogAbsensi({ token, onLogout }) {
           )}
         </div>
       </div>
+      <button
+        onClick={() => navigate("/scanner")}
+        title="Buka Scanner QR"
+        style={{
+          position: "fixed",
+          bottom: 28,
+          right: 28,
+          width: 56,
+          height: 56,
+          borderRadius: "50%",
+          background: "#ffc107",
+          border: "none",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.25)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 1050,
+          transition: "transform 0.15s, box-shadow 0.15s",
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = "scale(1.1)";
+          e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,0.3)";
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = "scale(1)";
+          e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.25)";
+        }}
+      >
+        <i className="bi bi-qr-code-scan" style={{ fontSize: 24, color: "#212529" }}></i>
+      </button>
     </div>
   );
 }
