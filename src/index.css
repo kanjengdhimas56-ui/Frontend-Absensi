@@ -441,6 +441,19 @@ body {
   }
 }
 
+/* Edit Pin */
+.edit-pin-container {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-out;
+}
+
+.edit-pin-container.show {
+  max-height: 218px; /* Sesuaikan dengan kebutuhan */
+  opacity: 1;
+}
+
 /*  QR */
 .qr-card {
   background: var(--card-bg);

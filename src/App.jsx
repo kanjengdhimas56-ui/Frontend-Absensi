@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import LogAbsensi from "./pages/LogAbsensi";
-import HalamanUser from "./pages/HalamanUser";
+import HalamanUser from "./pages/HalamanUser (yang dah gw edit)";
 import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
 import QrUser from "./pages/QrUser";
 import ScannerQr from "./pages/ScannerQr";
