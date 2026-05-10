@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import axios from "axios"
 import { QrReader } from "react-qr-reader"
 
 const BASE_URL = "http://103.247.10.115:3050"
 
-export default function ScannerQr({ token }) {
+export default function ScannerQr({ token, onRefresh }) {
     const [scanResult, setScanResult] = useState("")
     const [message, setMessage] = useState("")
     const [status, setStatus] = useState("")
@@ -50,7 +51,7 @@ export default function ScannerQr({ token }) {
 
                 <div style={{ marginBottom: "1rem" }}>
                     <button
-                        onClick={() =>
+                        onClick={(onRefresh) =>
                             navigate("/admin")
                         }
                         style={{
