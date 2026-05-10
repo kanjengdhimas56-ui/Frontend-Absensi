@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import LogAbsensi from "./pages/LogAbsensi";
-import HalamanUser from "./pages/HalamanUser (yang dah gw edit)";
+import LogAbsensi from "./pages/Admin/LogAbsensi";
+import HalamanUser from "./pages/User/HalamanUser";
 import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
-import QrUser from "./pages/QrUser";
-import ScannerQr from "./pages/ScannerQr";
+import QrUser from "./pages/User/QrUser";
+import ScannerQr from "./pages/Admin/ScannerQr";
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("x_token") || null);
