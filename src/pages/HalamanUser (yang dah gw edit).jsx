@@ -229,18 +229,17 @@ function HalamanUser({ token, onLogout }) {
                         </div>
                     )}
 
-                    <button className="btn btn-outline-primary w-100" onClick={() => navigate("/user/history")}>
+                    <button className="btn btn-outline-primary w-100 mb-2" onClick={() => navigate("/user/history")}>
                         <i className="bi bi-clock-history me-2"></i>
                         Lihat Riwayat Absen
                     </button>
-
-                    <button className="btn btn-outline-secondary w-100 mt-2" onClick={() => navigate("/user/qr")}>
+					
+					<button className="btn btn-outline-secondary w-100 mb-2" onClick={() => navigate("/user/qr")}>
                         <i className="bi bi-qr-code-scan me-2"></i>
                         Tampilkan QR Code
                     </button>
 
-                    <button className="btn btn-outline-danger w-100 mt-2" onClick={onLogout}>
-
+                    <button className="btn btn-outline-danger w-100 mt-3" onClick={onLogout}>
                         <i className="bi bi-box-arrow-right me-2"></i>
                         Logout
                     </button>
