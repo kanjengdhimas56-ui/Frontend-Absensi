@@ -1,24 +1,38 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import { useParams } from "react-router-dom"
 import axios from "axios"
 import { QrReader } from "react-qr-reader"
 
-const BASE_URL = "http://103.247.10.115:3050"
-
-export default function ScannerQr({ token, onRefresh }) {
+export default function ScannerQr({ token }) {
     const [scanResult, setScanResult] = useState("")
     const [message, setMessage] = useState("")
     const [status, setStatus] = useState("")
+    const [isCameraActive, setIsCameraActive] = useState(false)
+    const [isExiting, setIsExiting] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const qrRef = useRef(null)
     const navigate = useNavigate()
+
+    const handleBack = () => {
+        setIsCameraActive(false)
+        setIsExiting(true)
+        window.location.href = "/admin"
+    }
+
+    const handleRefresh = () => {
+        setIsRefreshing(true)
+        window.location.reload();
+    };
 
     const kirimQR = async (qrValue) => {
         try {
             setStatus("loading")
+            setIsLoading(true)
             setMessage("")
 
-            const response = await axios.post(
-                `${BASE_URL}/api/scanner/scan`,
+            const response = await axios.post("http://103.247.10.115:3050/api/scanner/scan",
                 { qr: qrValue },
                 { headers: { Authorization: `Bearer ${token}` } }
             )
@@ -32,32 +46,33 @@ export default function ScannerQr({ token, onRefresh }) {
     }
 
     useEffect(() => {
+        setIsCameraActive(true)
+        return () => {
+            setIsCameraActive(false)
+        }
+    }, [])
+
+    useEffect(() => {
         if (scanResult) kirimQR(scanResult)
     }, [scanResult])
     return (
-        <div
-            style={{
-                minHeight: "100vh",
-                background:
-                    "linear-gradient(135deg, #0a1628 0%, #0d2149 40%, #102a5e 70%, #0f3460 100%)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "2rem 1rem",
-                fontFamily: "sans-serif",
-            }}
-        >
+        <div className="login-wrapper position-relative">
             <div style={{ width: "100%", maxWidth: 420 }}>
-
-                <div style={{ marginBottom: "1rem" }}>
+                <div
+                    style={{
+                        marginBottom: "1rem",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: 10,
+                    }}
+                >
                     <button
-                        onClick={(onRefresh) =>
-                            navigate("/admin")
-                        }
+                        // className="col-4"
+                        onClick={handleBack}
                         style={{
                             display: "inline-flex",
-                            alignItems: "center",
-                            gap: 8,
+                            width: "fit-content",
                             background: "rgba(255,255,255,0.1)",
                             border: "1px solid rgba(255,255,255,0.2)",
                             borderRadius: 10,
@@ -80,11 +95,8 @@ export default function ScannerQr({ token, onRefresh }) {
                         <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
-                        Kembali ke Admin
                     </button>
-                </div>
 
-                <div className="text-center mb-4">
                     <div
                         style={{
                             display: "inline-flex",
@@ -95,7 +107,7 @@ export default function ScannerQr({ token, onRefresh }) {
                             background: "rgba(255,255,255,0.12)",
                             border: "1.5px solid rgba(255,255,255,0.25)",
                             borderRadius: 16,
-                            marginBottom: "0.75rem",
+                            marginBottom: "0",
                         }}
                     >
                         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" strokeWidth="1.8">
@@ -108,6 +120,39 @@ export default function ScannerQr({ token, onRefresh }) {
                             <rect x="18" y="18" width="3" height="3" />
                         </svg>
                     </div>
+
+                    <button
+                        onClick={handleRefresh}
+                        style={{
+                            display: "inline-flex",
+                            width: "fit-content",
+                            background: "rgba(255,255,255,0.1)",
+                            border: "1px solid rgba(255,255,255,0.2)",
+                            borderRadius: 10,
+                            padding: "8px 14px",
+                            color: "rgba(255,255,255,0.85)",
+                            fontSize: 13,
+                            fontWeight: 500,
+                            cursor: "pointer",
+                            transition: "background 0.2s, border-color 0.2s",
+                        }}
+                        onMouseEnter={e => {
+                            e.currentTarget.style.background = "rgba(255,255,255,0.18)"
+                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.35)"
+                        }}
+                        onMouseLeave={e => {
+                            e.currentTarget.style.background = "rgba(255,255,255,0.1)"
+                            e.currentTarget.style.borderColor = "rgba(255,255,255,0.2)"
+                        }}
+                        disabled={isLoading}
+                        title="Scan QR"
+                    >
+                        <i className={`bi bi-arrow-clockwise ${isRefreshing ? "spin" : ""}`}></i>
+                    </button>
+                </div>
+
+                <div className="text-center mb-4">
+
                     <h4 style={{ color: "#fff", fontWeight: 500, marginBottom: 4 }}>
                         Scanner QR Absensi
                     </h4>
@@ -117,11 +162,16 @@ export default function ScannerQr({ token, onRefresh }) {
                 </div>
 
                 <div
+                    className={`${isExiting ? "page-fade-out" : "page-fade-in"}`}
                     style={{
                         background: "rgba(255,255,255,0.97)",
                         borderRadius: 20,
                         overflow: "hidden",
                         boxShadow: "0 20px 60px rgba(0,0,0,0.35)",
+                        // animation: "fadeIn 0.6s ease-in-out",
+                        // animationFillMode: "forwards",
+                        // animationTimingFunction: "ease-in-out",
+                        // animationDelay: "0s",
                     }}
                 >
                     <div style={{ position: "relative", background: "#0a0f1e" }}>
@@ -159,17 +209,24 @@ export default function ScannerQr({ token, onRefresh }) {
                             }}
                         />
 
-                        <QrReader
-                            constraints={{ facingMode: "environment" }}
-                            onResult={(result, error) => {
-                                if (result) {
-                                    const text = result?.text
-                                    if (text && text !== scanResult) setScanResult(text)
-                                }
-                            }}
-                            style={{ width: "100%", display: "block" }}
-                            videoStyle={{ width: "100%", display: "block" }}
-                        />
+                        {isCameraActive ? (
+                            <QrReader
+                                key="qr-reader"
+                                ref={qrRef}
+                                delay={300}
+                                onError={err => console.error(err)}
+                                constraints={{ facingMode: "environment" }}
+                                onResult={(result, error) => {
+                                    if (result) {
+                                        const text = result?.text
+                                        if (text && text !== scanResult) setScanResult(text)
+                                    }
+                                }}
+                                style={{ width: "100%", display: "block" }}
+                                videoStyle={{ width: "100%", display: "block" }}
+                            />) : (
+                            <div style={{ width: "100%", paddingTop: "75%", background: "#000" }} />
+                        )}
 
                         <div
                             style={{

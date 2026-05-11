@@ -76,18 +76,6 @@ body {
   animation: slideUp 0.5s ease;
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .login-header {
   text-align: center;
   margin-bottom: 2rem;
@@ -167,7 +155,7 @@ body {
   background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
   display: flex;
   flex-direction: column;
-  animation: fadeIn 0.4s ease;
+  animation: fadeIn 0.6s ease;
   position: relative;
   overflow-x: hidden;
 }
@@ -194,16 +182,6 @@ body {
   bottom: -80px;
   left: -80px;
   pointer-events: none;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
 }
 
 .top-navbar {
@@ -413,10 +391,55 @@ body {
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.page-fade-in {
+  animation: fadeIn 0.4s ease-in-out forwards !important;
+}
+
+.page-fade-out {
+  animation: fadeOut 0.4s ease-in forwards !important;
 }
 
 .spin {
@@ -450,7 +473,8 @@ body {
 }
 
 .edit-pin-container.show {
-  max-height: 218px; /* Sesuaikan dengan kebutuhan */
+  max-height: 218px;
+  /* Sesuaikan dengan kebutuhan */
   opacity: 1;
 }
 
@@ -491,4 +515,59 @@ body {
   padding: 0.2rem 0.6rem;
   border-radius: 6px;
   font-weight: 600;
+}
+
+/* QR Scanner */
+.qr-scanner {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin: 2rem auto;
+  max-width: 320px;
+  text-align: center;
+}
+
+.qr-scanner .scanner-instruction {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.btn-scan {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s;
+}
+
+.btn-scan:hover {
+  background: var(--primary-dark);
+}
+
+/* SWEETALERT2 CUSTOM CLASSES */
+.swal2-container {
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+.swal2-small-icon {
+  zoom: 0.8 !important;
+  margin-bottom: 0 !important;
+}
+
+.swal2-small-title {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.swal2-small-text {
+  font-size: 8px !important;
+}
+
+.swal2-btn-sm {
+  padding: 0 !important;
+  font-size: 0.875rem !important;
 }

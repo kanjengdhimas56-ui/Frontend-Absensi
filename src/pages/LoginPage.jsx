@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import axios from "axios";
 
-export default function AuthLogin( { onLogin } ) {
+
+export default function AuthLogin({ onLogin }) {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false)
-  // const [error, setError] = useState("");
+  const MySwal = withReactContent(Swal);
   const [form, setForm] = useState({
     username: "",
     pin: "",
@@ -17,8 +20,6 @@ export default function AuthLogin( { onLogin } ) {
       ...form,
       [e.target.name]: e.target.value
     })
-    //untuk ngecek secara live
-    console.log(e.target.value)
   }
 
   const handleSubmit = (e) => {
@@ -35,16 +36,35 @@ export default function AuthLogin( { onLogin } ) {
         });
         // PANGGIL INI agar state di App.jsx terupdate
         onLogin(res.data.token, res.data.user.role_id);
-        alert("LOGIN BERHASIL!");
+        MySwal.fire({
+          title: "Berhasil!",
+          text: "LOGIN BERHASIL!",
+          icon: "success",
+          width: "300px",
+          customClass: {
+            icon: 'swal2-small-icon',
+            title: 'swal2-small-title',
+            content: 'swal2-small-text'
+          }
+        });
         if (res.data.user.role_id === 1) {
           navigate("/admin");
         } else {
           navigate("/user");
         }
-        console.log(res);
       })
       .catch(err => {
-        alert("Login Gagal: " + err.response?.data?.message);
+        MySwal.fire({
+          title: "Login Gagal!",
+          text: err.response?.data?.message,
+          icon: "error",
+          width: "300px",
+          customClass: {
+            icon: 'swal2-small-icon',
+            title: 'swal2-small-title',
+            content: 'swal2-small-text'
+          }
+        });
       })
       .finally(() => setIsLoading(false));
   }
@@ -99,13 +119,6 @@ export default function AuthLogin( { onLogin } ) {
               />
             </div>
           </div>
-
-          {/* {error && (
-            <div className="alert alert-danger py-2 d-flex align-items-center gap-2">
-              <i className="bi bi-exclamation-triangle-fill"></i>
-              <span>{error}</span>
-            </div>
-          )} */}
 
           <button
             type="submit"

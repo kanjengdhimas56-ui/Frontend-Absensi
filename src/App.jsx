@@ -7,10 +7,14 @@ import HalamanUser from "./pages/User/HalamanUser";
 import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
 import QrUser from "./pages/User/QrUser";
 import ScannerQr from "./pages/Admin/ScannerQr";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem("x_token") || null);
   const [role, setRole] = useState(Number(localStorage.getItem("user_role") || null));
+  const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
   // console.log("STATUS SAAT INI - Token:", token, "Role:", role);
 
@@ -22,11 +26,30 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("x_token");
-    localStorage.removeItem("user_role");
-    setToken(null);
-    setRole(null);
-    navigate("/");
+    MySwal.fire({
+      title: "Yakin ingin keluar?",
+      text: "Anda akan kembali ke halaman login",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Keluar",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#e74c3c",
+      cancelButtonColor: "#28a745",
+      width: "350px",
+      customClass: {
+        icon: 'swal2-small-icon',
+        title: 'swal2-small-title',
+        content: 'swal2-small-text'
+      }
+    }) .then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("x_token");
+        localStorage.removeItem("user_role");
+        setToken(null);
+        setRole(null);
+        navigate("/");
+      }
+    });
   };
 
   return (

@@ -54,9 +54,7 @@ function HalamanUser({ token, onLogout }) {
     // UPDATE PIN
     const handleSave = () => {
         if (!newPin) return;
-
         setError(""); // reset error biar clean
-
         axios
             .put(
                 "http://103.247.10.115:3050/api/auth/update-pin",
@@ -77,7 +75,13 @@ function HalamanUser({ token, onLogout }) {
                     title: "Berhasil Update PIN",
                     text: "PIN berhasil diperbarui!",
                     icon: "success",
-                    confirmButtonColor: "#10b981", // Warna success
+                    width: "300px",
+                    confirmButtonColor: "#10b981",
+                    customClass: {
+                        icon: 'swal2-small-icon',
+                        title: 'swal2-small-title',
+                        content: 'swal2-small-text'
+                    }
                 });
                 setOldPin("");
                 setNewPin("");
@@ -88,16 +92,17 @@ function HalamanUser({ token, onLogout }) {
                     title: "Gagal Update PIN",
                     text: err?.response?.data?.message || "PIN Lama salah atau server bermasalah",
                     icon: "error",
-                    confirmButtonColor: "#ef4444", // Warna danger
+                    width: "300px",
+                    confirmButtonColor: "#ef4444",
+                    customClass: {
+                        icon: 'swal2-small-icon',
+                        title: 'swal2-small-title',
+                        content: 'swal2-small-text'
+                    }
                 });
                 setOldPin("");
             });
     };
-
-    // loading state (FIX biar gak blank)
-    // if (!user) {
-    //     return <p className="text-center mt-5">Loading...</p>;
-    // }
 
     return (
         <div className="login-wrapper position-relative" style={{ paddingTop: "80px" }}>
@@ -152,6 +157,7 @@ function HalamanUser({ token, onLogout }) {
                                         type="text"
                                         className="form-control"
                                         value={user.username || ""}
+                                        disabled
                                         readOnly
                                     />
                                 </div>
@@ -167,6 +173,7 @@ function HalamanUser({ token, onLogout }) {
                                         type="text"
                                         className="form-control"
                                         value={user.nama_jurusan || ""}
+                                        disabled
                                         readOnly
                                     />
                                 </div>
@@ -182,6 +189,7 @@ function HalamanUser({ token, onLogout }) {
                                         type="text"
                                         className="form-control"
                                         value={user.no_hp || ""}
+                                        disabled
                                         readOnly
                                     />
                                 </div>
