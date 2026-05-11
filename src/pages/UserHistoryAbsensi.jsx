@@ -694,9 +694,9 @@ export default function UserHistoryAbsensi() {
 
                         border: isActive
                           ? `1.5px solid ${cfg.border}`
-                          : "1px solid rgb(238, 238, 238)",
+                          : "1px solid rgba(238, 238, 238, 0.96)",
 
-                        background: "rgb(255, 255, 255)",
+                        background: "rgba(255, 251, 251, 0.81)",
 
                         boxShadow: isActive
                           ? `0 0 18px -8px ${cfg.color}`
@@ -894,7 +894,7 @@ export default function UserHistoryAbsensi() {
                 <div
                   style={{
                     padding: "14px 18px 12px",
-                    borderBottom: "1px solid rgba(220,220,220,0.5)",
+                    borderBottom: "1px solid rgba(238, 238, 238, 0.3)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",

@@ -53,7 +53,7 @@ export default function ScannerQr({ token }) {
     }, [])
 
     useEffect(() => {
-        if (scanResult) kirimQR(scanResult)
+        if (scanResult && status !== "loading") kirimQR(scanResult)
     }, [scanResult])
     return (
         <div className="login-wrapper position-relative">
@@ -65,12 +65,16 @@ export default function ScannerQr({ token }) {
                         justifyContent: "space-between",
                         alignItems: "center",
                         gap: 10,
+                        position: "relative",
+                        zIndex: 100
                     }}
                 >
                     <button
                         // className="col-4"
                         onClick={handleBack}
                         style={{
+                            position: "relative",
+                            zIndex: 101,
                             display: "inline-flex",
                             width: "fit-content",
                             background: "rgba(255,255,255,0.1)",
@@ -99,6 +103,8 @@ export default function ScannerQr({ token }) {
 
                     <div
                         style={{
+                            position: "relative",
+                            zIndex: 101,
                             display: "inline-flex",
                             alignItems: "center",
                             justifyContent: "center",
