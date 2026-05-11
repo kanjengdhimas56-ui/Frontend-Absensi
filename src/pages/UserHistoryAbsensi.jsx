@@ -1,33 +1,24 @@
 import { useState, useEffect, useMemo } from "react";
+import axios from "axios";
 
-// ─── CONFIG ──────────────────────────────────────────────────────────────────
-const BASE_URL = "https://your-api-url.com"; // ← Ganti dengan URL BE
+const BASE_URL = "http://103.247.10.115:3050";
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 const HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const BULAN = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
+  "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+  "Juli", "Agustus", "September", "Oktober", "November", "Desember",
 ];
 
 function getWeekRange(date) {
   const d = new Date(date);
-  const day = d.getDay(); // 0 = Minggu
+  const day = d.getDay();
   const diffToMon = day === 0 ? -6 : 1 - day;
   const mon = new Date(d);
   mon.setDate(d.getDate() + diffToMon);
+  mon.setHours(0, 0, 0, 0);
   const sun = new Date(mon);
   sun.setDate(mon.getDate() + 6);
+  sun.setHours(23, 59, 59, 999);
   return { start: mon, end: sun };
 }
 
@@ -63,7 +54,6 @@ function getWeekNumber(date) {
   );
 }
 
-// ─── DECODE JWT (no library needed) ──────────────────────────────────────────
 function decodeJWT(token) {
   try {
     const payload = token.split(".")[1];
@@ -73,7 +63,6 @@ function decodeJWT(token) {
   }
 }
 
-// ─── STATUS CONFIG ───────────────────────────────────────────────────────────
 const STATUS = {
   hadir: {
     label: "Hadir",
@@ -98,47 +87,6 @@ const STATUS = {
   },
 };
 
-// ─── MOCK DATA (hapus jika BE sudah siap) ────────────────────────────────────
-function generateMockData(userName) {
-  const today = new Date();
-  const logs = [];
-  for (let i = 27; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    if (d.getDay() === 0 || d.getDay() === 6) continue; // skip weekend
-    const rand = Math.random();
-    let status = rand < 0.7 ? "hadir" : rand < 0.85 ? "izin" : "absen";
-    const timeStr =
-      status === "hadir"
-        ? `0${7 + Math.floor(Math.random() * 2)}:${String(Math.floor(Math.random() * 59)).padStart(2, "0")}`
-        : null;
-    logs.push({
-      id: i,
-      timestamp: timeStr
-        ? new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            d.getDate(),
-            ...timeStr.split(":"),
-          ).toISOString()
-        : new Date(
-            d.getFullYear(),
-            d.getMonth(),
-            d.getDate(),
-            0,
-            0,
-            0,
-          ).toISOString(),
-      status,
-      keterangan: status === "izin" ? "Izin keperluan pribadi" : null,
-      nama: userName || "Pengguna",
-    });
-  }
-  return logs;
-}
-
-// ─── COMPONENTS ──────────────────────────────────────────────────────────────
-
 function StatusBadge({ status }) {
   const cfg = STATUS[status] || STATUS.absen;
   return (
@@ -161,65 +109,6 @@ function StatusBadge({ status }) {
       {cfg.label}
     </span>
   );
-}
-
-function StatCard({ label, count, status, isActive, onClick }) {
-  //   const cfg = STATUS[status];
-  //   const [isHovered, setIsHovered] = useState(false);
-  //   return (
-  //     <button
-  //       onClick={onClick}
-  //       onMouseEnter={() => setIsHovered(true)}
-  //       onMouseLeave={() => setIsHovered(false)}
-  //       style={{
-  //         flex: 1,
-  //         minWidth: 80,
-  //         padding: "12px 10px",
-  //         borderRadius: 14,
-  //         border: isActive
-  //           ? `2px solid ${cfg.color}`
-  //           : isHovered
-  //             ? `2px solid ${cfg.color}80` // 80 di belakang warna untuk transparansi
-  //             : "2px solid rgba(238, 238, 238, 0.96)",
-  // background: isActive
-  //           ? "rgba(255,255,255,0.04)"
-  //           : isHovered
-  //             ? "rgba(255, 255, 255, 1)"
-  //             : "rgba(255, 251, 251, 0.81)",
-  //         cursor: "pointer",
-  //         textAlign: "center",
-  //         backdropFilter: "blur(8px)",
-  //         // 3. Efek Animasi hover
-  //         transition: "all 0.3s ease",
-  //         boxShadow: isHovered ? "0 8px 15px rgba(0,0,0,0.1)" : "none",
-  //       }}
-  //     >
-  //       <div
-  //         style={{
-  //           color: cfg.color,
-  //           fontSize: 19,
-  //           fontWeight: 800,
-  //           fontFamily: "'Syne', sans-serif",
-  //           // Angka membesar sedikit saat hover
-  //           transform: isHovered ? "scale(1.1)" : "scale(1)",
-  //           transition: "transform 0.2s ease"
-  //         }}
-  //       >
-  //         {count}
-  //       </div>
-  //       <div
-  //         style={{
-  //           color: "rgb(0, 0, 0)",
-  //           fontSize: 11,
-  //           marginTop: 3,
-  //           letterSpacing: "0.04em",
-  //           fontWeight: isActive ? "bold" : "normal"
-  //         }}
-  //       >
-  //         {cfg.label}
-  //       </div>
-  //     </button>
-  //   );
 }
 
 function DayDot({ date, logEntry, isToday }) {
@@ -260,12 +149,12 @@ function DayDot({ date, logEntry, isToday }) {
           fontWeight: 700,
           fontSize: 13,
           background: isToday
-            ? "#2563eb"
+            ? "#0284c7"
             : cfg
               ? cfg.bg
               : "rgba(219, 216, 216, 0.18)",
           border: isToday
-            ? "2px solid #60a5fa"
+            ? "2px solid #38bdf8"
             : cfg
               ? `2px solid ${cfg.border}`
               : "2px solid rgba(150, 148, 148, 0.92)",
@@ -291,6 +180,7 @@ function DayDot({ date, logEntry, isToday }) {
     </div>
   );
 }
+
 function WarningBanner({ absenDays }) {
   if (!absenDays.length) return null;
   return (
@@ -303,19 +193,18 @@ function WarningBanner({ absenDays }) {
         margin: "0 auto",
       }}
     >
-      {/* DIV DALAM: Kartu Peringatan Merah */}
       <div
         style={{
           marginTop: 0,
           marginBottom: 0,
           borderRadius: 14,
           border: "1px solid rgba(247, 12, 12, 0.69)",
-          background: "rgba(239,68,68,0.12)",
+          background: "rgb(255, 255, 255)",
           padding: "14px 18px",
           display: "flex",
           gap: 12,
           alignItems: "flex-start",
-          boxShadow:"0 2px 2px -2px rgba(0, 0, 0, 0.3), 0 4px 5px -6px rgb(175, 79, 79)",
+          boxShadow: "0 2px 2px -2px rgba(0, 0, 0, 0.3), 0 4px 5px -6px rgb(175, 79, 79)",
         }}
       >
         <span style={{ fontSize: 20, lineHeight: 1 }}>🚨</span>
@@ -330,13 +219,7 @@ function WarningBanner({ absenDays }) {
           >
             Peringatan Ketidakhadiran
           </div>
-          <div
-            style={{
-              color: "#333", // Teks hitam lebih gelap agar kontras
-              fontSize: 12,
-              lineHeight: 1.6,
-            }}
-          >
+          <div style={{ color: "#333", fontSize: 12, lineHeight: 1.6 }}>
             Kamu tidak hadir pada:{" "}
             <span style={{ color: "#f83131", fontWeight: 700 }}>
               {absenDays
@@ -355,7 +238,7 @@ function WarningBanner({ absenDays }) {
 }
 
 function RecordRow({ log, index }) {
-  const d = isoToDate(log.timestamp);
+  const d = isoToDate(log.absen);
   const isAbsen = log.status === "absen";
 
   return (
@@ -368,16 +251,13 @@ function RecordRow({ log, index }) {
         background: isAbsen
           ? "rgba(255, 235, 235, 0.97)"
           : "rgba(255, 255, 255, 0.98)",
-        border: isAbsen
-          ? "1px solid rgba(185, 181, 181, 0.92)"
-          : "1px solid rgba(185, 181, 181, 0.92)",
+        border: "1px solid rgba(185, 181, 181, 0.92)",
         gap: 14,
         boxShadow:
           "0 4px 7px -5px rgba(247, 14, 14, 0.3), 0 3px 6px -6px rgba(0, 0, 0, 0.3)",
         animation: `fadeUp 0.3s ease ${index * 0.04}s both`,
       }}
     >
-      {/* Day indicator */}
       <div style={{ minWidth: 44, textAlign: "center" }}>
         <div
           style={{
@@ -405,12 +285,8 @@ function RecordRow({ log, index }) {
         </div>
       </div>
 
-      {/* Divider */}
-      <div
-        style={{ width: 1, height: 40, background: "rgba(252, 244, 244, 0.1)" }}
-      />
+      <div style={{ width: 1, height: 40, background: "rgba(200, 200, 200, 0.4)" }} />
 
-      {/* Time */}
       <div style={{ minWidth: 68 }}>
         {log.status === "hadir" ? (
           <>
@@ -422,7 +298,7 @@ function RecordRow({ log, index }) {
                 fontFamily: "'Syne', sans-serif",
               }}
             >
-              {new Date(log.timestamp).toLocaleTimeString("id-ID", {
+              {d.toLocaleTimeString("id-ID", {
                 hour: "2-digit",
                 minute: "2-digit",
               })}
@@ -438,27 +314,19 @@ function RecordRow({ log, index }) {
             </div>
           </>
         ) : (
-          <div
-            style={{
-              fontSize: 11,
-              color: "rgb(20, 20, 20)",
-              fontStyle: "italic",
-            }}
-          >
+          <div style={{ fontSize: 11, color: "rgb(20, 20, 20)", fontStyle: "italic" }}>
             —
           </div>
         )}
       </div>
 
-      {/* Spacer */}
       <div style={{ flex: 1 }} />
 
-      {/* Keterangan */}
       {log.keterangan && (
         <div
           style={{
             fontSize: 11,
-            color: "rgba(255,255,255,0.45)",
+            color: "rgba(100,100,100,0.8)",
             maxWidth: 140,
             textAlign: "right",
           }}
@@ -467,16 +335,12 @@ function RecordRow({ log, index }) {
         </div>
       )}
 
-      {/* Badge */}
       <StatusBadge status={log.status} />
 
-      {/* Warning icon for absen */}
       {isAbsen && <span style={{ fontSize: 16 }}>⚠️</span>}
     </div>
   );
 }
-
-// ─── MAIN PAGE ───────────────────────────────────────────────────────────────
 export default function UserHistoryAbsensi() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -484,15 +348,12 @@ export default function UserHistoryAbsensi() {
   const [userName, setUserName] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-  // Week navigation: offset from current week (0 = this week)
   const [weekOffset, setWeekOffset] = useState(0);
-
-  // Status filter (null = all)
   const [filterStatus, setFilterStatus] = useState(null);
 
-  // ── Fetch attendance log ──────────────────────────────────────────────────
   useEffect(() => {
     const token = localStorage.getItem("x_token");
+
     if (!token) {
       setError("Sesi habis. Silakan login kembali.");
       setLoading(false);
@@ -505,42 +366,43 @@ export default function UserHistoryAbsensi() {
       setUserInfo(decoded);
     }
 
-    // ── Ganti bagian ini dengan API call BE yang sebenarnya ──────────────
-    // Contoh endpoint yang diharapkan dari BE:
-    // GET /user/log-absensi
-    // Response: [{ id, timestamp, status: "hadir"|"izin"|"absen", keterangan?, nama }]
-    //
-    // fetch(`${BASE_URL}/user/log-absensi`, {
-    //   headers: { Authorization: `Bearer ${token}` },
-    // })
-    //   .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    //   .then((data) => { setLogs(data); setLoading(false); })
-    //   .catch((e) => { setError("Gagal memuat data absensi."); setLoading(false); });
-
-    // MOCK — hapus setelah BE siap
-    setTimeout(() => {
-      const name = decoded?.name || "Demo User";
-      setLogs(generateMockData(name));
-      setLoading(false);
-    }, 900);
+    axios
+      .get(`${BASE_URL}/api/user-akses/histori`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        const rawData = res.data?.data ?? [];
+        setLogs(rawData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        const status = err.response?.status;
+        if (status === 401 || status === 403) {
+          setError("Sesi tidak valid. Silakan login kembali.");
+        } else if (status === 404) {
+          setError("Data absensi tidak ditemukan.");
+        } else {
+          setError("Gagal memuat data absensi. Periksa koneksi jaringan.");
+        }
+        setLoading(false);
+      });
   }, []);
 
-  // ── Compute week range ────────────────────────────────────────────────────
   const { start: weekStart, end: weekEnd } = useMemo(() => {
     const pivot = new Date();
     pivot.setDate(pivot.getDate() + weekOffset * 7);
     return getWeekRange(pivot);
   }, [weekOffset]);
 
-  // ── Filter logs for current week ─────────────────────────────────────────
   const weekLogs = useMemo(() => {
     return logs.filter((l) => {
-      const d = isoToDate(l.timestamp);
+      const d = isoToDate(l.absen);
       return d >= weekStart && d <= weekEnd;
     });
   }, [logs, weekStart, weekEnd]);
 
-  // ── Build full week days (Mon–Fri for work) ───────────────────────────────
   const weekDays = useMemo(() => {
     const days = [];
     for (let i = 0; i < 7; i++) {
@@ -551,32 +413,28 @@ export default function UserHistoryAbsensi() {
     return days;
   }, [weekStart]);
 
-  // ── Absen warning days (Absen on workdays in current week) ───────────────
   const absenDays = useMemo(() => {
     return weekDays
-      .filter((d) => d.getDay() !== 0 && d.getDay() !== 6) // only weekdays
+      .filter((d) => d.getDay() !== 0 && d.getDay() !== 6)
       .filter((d) => {
-        const entry = weekLogs.find((l) => sameDay(isoToDate(l.timestamp), d));
+        const entry = weekLogs.find((l) => sameDay(isoToDate(l.absen), d));
         return entry && entry.status === "absen";
       });
   }, [weekDays, weekLogs]);
-
-  // ── Stats (all-time) ─────────────────────────────────────────────────────
-  const stats = useMemo(() => {
+  const totalStats = useMemo(() => {
     const counts = { hadir: 0, izin: 0, absen: 0 };
-    weekLogs.forEach((l) => {
+    logs.forEach((l) => {
       if (counts[l.status] !== undefined) counts[l.status]++;
     });
     return counts;
-  }, [weekLogs]);
+  }, [logs]);
 
-  // ── Filtered display list ────────────────────────────────────────────────
   const displayLogs = useMemo(() => {
     const filtered = filterStatus
       ? weekLogs.filter((l) => l.status === filterStatus)
       : weekLogs;
     return filtered.sort(
-      (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
+      (a, b) => new Date(b.absen) - new Date(a.absen),
     );
   }, [weekLogs, filterStatus]);
 
@@ -584,17 +442,16 @@ export default function UserHistoryAbsensi() {
   const weekNum = getWeekNumber(weekStart);
   const isCurrentWeek = weekOffset === 0;
 
-  // ── Render ────────────────────────────────────────────────────────────────
   return (
     <>
-      {/* ── Google Fonts ── */}
       <style>{`
-       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
-      
-       * { box-sizing: border-box; margin: 0; padding: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-          background: #1f0806;
+          /* ── BACKGROUND BARU: biru-navy gelap ── */
+          background: linear-gradient(160deg, #0a1628 0%, #0d1f3c 50%, #071018 100%);
           min-height: 100vh;
           font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -603,25 +460,35 @@ export default function UserHistoryAbsensi() {
           from { opacity: 0; transform: translateY(12px); }
           to   { opacity: 1; transform: translateY(0); }
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50%       { opacity: 0.4; }
-        }
         @keyframes spin {
           to { transform: rotate(360deg); }
         }
 
         .week-btn:hover {
-          background: rgba(37,99,235,0.3) !important;
-          border-color: rgba(37,99,235,0.6) !important;
+          background: rgba(2,132,199,0.3) !important;
+          border-color: rgba(2,132,199,0.6) !important;
         }
         .back-btn:hover {
-          background: rgba(253, 249, 249, 0.1) !important;
+          background: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .stat-pill {
+          flex: 1;
+          padding: 10px 8px;
+          border-radius: 12px;
+          border: 1px solid rgba(238,238,238,0.96);
+          background: rgba(255,251,251,0.81);
+          cursor: pointer;
+          text-align: center;
+          transition: all 0.2s ease;
+        }
+        .stat-pill:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 14px rgba(0,0,0,0.1);
         }
       `}</style>
 
-      <div className="dashboard-wrapper">
-        {/* Content Wrapper */}
+      <div>
         <div
           style={{
             position: "relative",
@@ -632,7 +499,6 @@ export default function UserHistoryAbsensi() {
             width: "100%",
           }}
         >
-          {/* ── Header bar ── */}
           <div
             style={{
               display: "flex",
@@ -657,8 +523,8 @@ export default function UserHistoryAbsensi() {
               style={{
                 background: "rgba(255, 255, 255, 0.06)",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
-                borderRadius: "12px", // Sedikit lebih bulat agar modern
-                width: 42, // Sedikit lebih besar agar mudah diklik (Fitts's Law)
+                borderRadius: "12px",
+                width: 42,
                 height: 42,
                 display: "flex",
                 alignItems: "center",
@@ -666,8 +532,8 @@ export default function UserHistoryAbsensi() {
                 cursor: "pointer",
                 color: "#ffffff",
                 fontSize: "18px",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Transisi lebih smooth
-                backdropFilter: "blur(10px)", // Efek kaca (Glassmorphism)
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                backdropFilter: "blur(10px)",
                 boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
                 outline: "none",
               }}
@@ -698,8 +564,6 @@ export default function UserHistoryAbsensi() {
               </div>
             </div>
           </div>
-
-          {/* ── Loading ── */}
           {loading && (
             <div style={{ textAlign: "center", padding: "80px 0" }}>
               <div
@@ -707,8 +571,8 @@ export default function UserHistoryAbsensi() {
                   width: 36,
                   height: 36,
                   borderRadius: "50%",
-                  border: "3px solid rgba(37,99,235,0.2)",
-                  borderTopColor: "#2563eb",
+                  border: "3px solid rgba(2,132,199,0.2)",
+                  borderTopColor: "#0284c7",
                   margin: "0 auto 16px",
                   animation: "spin 0.8s linear infinite",
                 }}
@@ -718,8 +582,6 @@ export default function UserHistoryAbsensi() {
               </div>
             </div>
           )}
-
-          {/* ── Error ── */}
           {!loading && error && (
             <div
               style={{
@@ -729,16 +591,15 @@ export default function UserHistoryAbsensi() {
                 border: "1px solid rgba(239,68,68,0.3)",
                 textAlign: "center",
                 color: "#fca5a5",
+                fontSize: 14,
               }}
             >
+              <div style={{ fontSize: 32, marginBottom: 10 }}>⚠️</div>
               {error}
             </div>
           )}
-
-          {/* ── Main content ── */}
           {!loading && !error && (
             <>
-              {/* ── User profile card ── */}
               <div
                 style={{
                   borderRadius: 18,
@@ -758,15 +619,15 @@ export default function UserHistoryAbsensi() {
                     width: 52,
                     height: 52,
                     borderRadius: 14,
-                    background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
+                    background: "linear-gradient(135deg, #0284c7, #0ea5e9)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
                     fontSize: 22,
                     fontWeight: 700,
-                    color: "#0c0c0c",
+                    color: "#fff",
                     fontFamily: "'Syne', sans-serif",
-                    boxShadow: "0 4px 14px rgba(37,99,235,0.45)",
+                    boxShadow: "0 4px 14px rgba(2,132,199,0.45)",
                   }}
                 >
                   {userName.charAt(0).toUpperCase()}
@@ -782,15 +643,8 @@ export default function UserHistoryAbsensi() {
                   >
                     {userName}
                   </div>
-                  <div
-                    style={{
-                      fontSize: 12,
-                      color: "rgb(8, 8, 8)",
-                      marginTop: 2,
-                    }}
-                  >
-                    Peserta OJT ·{" "}
-                    {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
+                  <div style={{ fontSize: 12, color: "rgb(8, 8, 8)", marginTop: 2 }}>
+                    Peserta OJT · {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -816,8 +670,57 @@ export default function UserHistoryAbsensi() {
                   </div>
                 </div>
               </div>
-
-              {/* ── Week Navigator ── */}
+              <div style={{ marginBottom: 6, padding: "0 2px" }}>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.55)", fontWeight: 600, letterSpacing: "0.08em", marginBottom: 8 }}>
+                  TOTAL KESELURUHAN
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
+                {["hadir", "izin", "absen"].map((s) => {
+                  const cfg = STATUS[s];
+                  const isActive = filterStatus === s;
+                  return (
+                    <button
+                      key={s}
+                      className="stat-pill"
+                      onClick={() => setFilterStatus(filterStatus === s ? null : s)}
+                      style={{
+                        flex: 1,
+                        padding: "10px 8px",
+                        borderRadius: 12,
+                        border: isActive
+                          ? `2px solid ${cfg.color}`
+                          : "1px solid rgba(238,238,238,0.96)",
+                        background: isActive ? cfg.bg : "rgba(255,251,251,0.81)",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      <div
+                        style={{
+                          color: cfg.color,
+                          fontSize: 19,
+                          fontWeight: 800,
+                          fontFamily: "'Syne', sans-serif",
+                        }}
+                      >
+                        {totalStats[s]}
+                      </div>
+                      <div
+                        style={{
+                          color: "#000",
+                          fontSize: 11,
+                          marginTop: 3,
+                          fontWeight: isActive ? 700 : 400,
+                        }}
+                      >
+                        {cfg.label}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -867,13 +770,7 @@ export default function UserHistoryAbsensi() {
                   >
                     {isCurrentWeek ? "🗓 Minggu Ini" : `Minggu ke-${weekNum}`}
                   </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: "rgb(0, 0, 0)",
-                      marginTop: 1,
-                    }}
-                  >
+                  <div style={{ fontSize: 11, color: "rgb(0, 0, 0)", marginTop: 1 }}>
                     {formatDate(weekStart)} – {formatDate(weekEnd)}
                   </div>
                 </div>
@@ -883,15 +780,13 @@ export default function UserHistoryAbsensi() {
                   onClick={() => setWeekOffset((o) => Math.min(0, o + 1))}
                   disabled={isCurrentWeek}
                   style={{
-                    background: isCurrentWeek
-                      ? "rgba(255, 251, 251, 0.81)"
-                      : "rgba(255, 251, 251, 0.81)",
+                    background: "rgba(255, 251, 251, 0.81)",
                     border: "1px solid rgba(238, 238, 238, 0.96)",
                     borderRadius: 10,
                     width: 36,
                     height: 36,
                     cursor: isCurrentWeek ? "not-allowed" : "pointer",
-                    color: isCurrentWeek ? "rgb(0, 0, 0)" : "#000000",
+                    color: isCurrentWeek ? "rgba(0,0,0,0.3)" : "#000000",
                     fontSize: 17,
                     display: "flex",
                     alignItems: "center",
@@ -902,8 +797,6 @@ export default function UserHistoryAbsensi() {
                   ›
                 </button>
               </div>
-
-              {/* ── Mini calendar strip ── */}
               <div
                 style={{
                   borderRadius: 16,
@@ -912,13 +805,13 @@ export default function UserHistoryAbsensi() {
                   padding: "16px 12px",
                   display: "flex",
                   justifyContent: "space-around",
-                  marginBottom: 0,
+                  marginBottom: 12,
                   backdropFilter: "blur(8px)",
                 }}
               >
                 {weekDays.map((d, i) => {
                   const entry = weekLogs.find((l) =>
-                    sameDay(isoToDate(l.timestamp), d),
+                    sameDay(isoToDate(l.absen), d),
                   );
                   return (
                     <DayDot
@@ -930,41 +823,19 @@ export default function UserHistoryAbsensi() {
                   );
                 })}
               </div>
-
-              {/* ── Stats cards ── */}
-              <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
-                {["hadir", "izin", "absen"].map((s) => (
-                  <StatCard
-                    key={s}
-                    status={s}
-                    label={STATUS[s].label}
-                    count={stats[s]}
-                    isActive={filterStatus === s}
-                    onClick={() =>
-                      setFilterStatus(filterStatus === s ? null : s)
-                    }
-                  />
-                ))}
-              </div>
-
-              {/* ── Filter label ──
               {filterStatus && (
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    marginBottom: 12,
+                    marginBottom: 10,
+                    padding: "0 4px",
                   }}
                 >
-                  <div style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.86)" }}>
+                  <div style={{ fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
                     Filter aktif:{" "}
-                    <span
-                      style={{
-                        color: STATUS[filterStatus].color,
-                        fontWeight: 600,
-                      }}
-                    >
+                    <span style={{ color: STATUS[filterStatus].color, fontWeight: 600 }}>
                       {STATUS[filterStatus].label}
                     </span>
                   </div>
@@ -973,7 +844,7 @@ export default function UserHistoryAbsensi() {
                     style={{
                       background: "none",
                       border: "none",
-                      color: "rgba(243, 154, 154, 0.85)",
+                      color: "rgba(255,150,150,0.85)",
                       cursor: "pointer",
                       fontSize: 12,
                     }}
@@ -981,12 +852,9 @@ export default function UserHistoryAbsensi() {
                     Hapus filter ✕
                   </button>
                 </div>
-              )} */}
-
-              {/* ── Records list ── */}
+              )}
               <div
                 style={{
-                  marginTop: 0,
                   borderRadius: 16,
                   background: "rgba(255, 251, 251, 0.81)",
                   border: "1px solid rgba(32, 32, 32, 0.92)",
@@ -998,7 +866,7 @@ export default function UserHistoryAbsensi() {
                 <div
                   style={{
                     padding: "14px 18px 12px",
-                    borderBottom: "1px solid rgba(248, 246, 246, 0.49)",
+                    borderBottom: "1px solid rgba(220,220,220,0.5)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
@@ -1014,17 +882,11 @@ export default function UserHistoryAbsensi() {
                   >
                     Log Kehadiran
                   </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: "rgb(0, 0, 0)",
-                    }}
-                  >
-                    {displayLogs.length} catatan
+                  <div style={{ fontSize: 11, color: "rgb(0, 0, 0)" }}>
+                    {displayLogs.length} catatan minggu ini
                   </div>
                 </div>
 
-                {/* ── Warning banner (langsung di bawah header card) ── */}
                 {absenDays.length > 0 && (
                   <div style={{ padding: "12px 12px 0" }}>
                     <WarningBanner absenDays={absenDays} />
@@ -1058,8 +920,6 @@ export default function UserHistoryAbsensi() {
                   )}
                 </div>
               </div>
-
-              {/* ── Legend ── */}
               <div
                 style={{
                   display: "flex",
@@ -1082,12 +942,7 @@ export default function UserHistoryAbsensi() {
                         background: cfg.color,
                       }}
                     />
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: "rgba(255, 255, 255, 0.83)",
-                      }}
-                    >
+                    <span style={{ fontSize: 11, color: "rgba(255, 255, 255, 0.83)" }}>
                       {cfg.label}
                     </span>
                   </div>
