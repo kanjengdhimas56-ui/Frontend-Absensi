@@ -6,8 +6,18 @@ const BASE_URL = "https://your-api-url.com"; // ← Ganti dengan URL BE
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 const HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const BULAN = [
-  "Januari","Februari","Maret","April","Mei","Juni",
-  "Juli","Agustus","September","Oktober","November","Desember",
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
 ];
 
 function getWeekRange(date) {
@@ -48,7 +58,7 @@ function getWeekNumber(date) {
       ((d.getTime() - week1.getTime()) / 86400000 -
         3 +
         ((week1.getDay() + 6) % 7)) /
-        7
+        7,
     )
   );
 }
@@ -82,7 +92,7 @@ const STATUS = {
   absen: {
     label: "Tidak Hadir",
     color: "#ef4444",
-    bg: "rgba(239,68,68,0.12)",
+    bg: "rgba(250, 0, 0, 0.12)",
     border: "rgba(239,68,68,0.35)",
     icon: "✗",
   },
@@ -98,14 +108,27 @@ function generateMockData(userName) {
     if (d.getDay() === 0 || d.getDay() === 6) continue; // skip weekend
     const rand = Math.random();
     let status = rand < 0.7 ? "hadir" : rand < 0.85 ? "izin" : "absen";
-    const timeStr = status === "hadir"
-      ? `0${7 + Math.floor(Math.random() * 2)}:${String(Math.floor(Math.random() * 59)).padStart(2, "0")}`
-      : null;
+    const timeStr =
+      status === "hadir"
+        ? `0${7 + Math.floor(Math.random() * 2)}:${String(Math.floor(Math.random() * 59)).padStart(2, "0")}`
+        : null;
     logs.push({
       id: i,
       timestamp: timeStr
-        ? new Date(d.getFullYear(), d.getMonth(), d.getDate(), ...timeStr.split(":")).toISOString()
-        : new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).toISOString(),
+        ? new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            ...timeStr.split(":"),
+          ).toISOString()
+        : new Date(
+            d.getFullYear(),
+            d.getMonth(),
+            d.getDate(),
+            0,
+            0,
+            0,
+          ).toISOString(),
       status,
       keterangan: status === "izin" ? "Izin keperluan pribadi" : null,
       nama: userName || "Pengguna",
@@ -141,31 +164,62 @@ function StatusBadge({ status }) {
 }
 
 function StatCard({ label, count, status, isActive, onClick }) {
-  const cfg = STATUS[status];
-  return (
-    <button
-      onClick={onClick}
-      style={{
-        flex: 1,
-        minWidth: 100,
-        padding: "18px 16px",
-        borderRadius: 14,
-        border: isActive ? `2px solid ${cfg.color}` : "2px solid rgb(252, 248, 248)",
-        background: isActive ? cfg.bg : "rgb(255, 255, 255)",
-        cursor: "pointer",
-        textAlign: "left",
-        transition: "all 0.2s",
-        backdropFilter: "blur(8px)",
-      }}
-    >
-      <div style={{ color: cfg.color, fontSize: 22, fontWeight: 800, fontFamily: "'Syne', sans-serif" }}>
-        {count}
-      </div>
-      <div style={{ color: "rgb(15, 15, 15)", fontSize: 12, marginTop: 3, letterSpacing: "0.04em" }}>
-        {cfg.label}
-      </div>
-    </button>
-  );
+  //   const cfg = STATUS[status];
+  //   const [isHovered, setIsHovered] = useState(false);
+  //   return (
+  //     <button
+  //       onClick={onClick}
+  //       onMouseEnter={() => setIsHovered(true)}
+  //       onMouseLeave={() => setIsHovered(false)}
+  //       style={{
+  //         flex: 1,
+  //         minWidth: 80,
+  //         padding: "12px 10px",
+  //         borderRadius: 14,
+  //         border: isActive
+  //           ? `2px solid ${cfg.color}`
+  //           : isHovered
+  //             ? `2px solid ${cfg.color}80` // 80 di belakang warna untuk transparansi
+  //             : "2px solid rgba(238, 238, 238, 0.96)",
+  // background: isActive
+  //           ? "rgba(255,255,255,0.04)"
+  //           : isHovered
+  //             ? "rgba(255, 255, 255, 1)"
+  //             : "rgba(255, 251, 251, 0.81)",
+  //         cursor: "pointer",
+  //         textAlign: "center",
+  //         backdropFilter: "blur(8px)",
+  //         // 3. Efek Animasi hover
+  //         transition: "all 0.3s ease",
+  //         boxShadow: isHovered ? "0 8px 15px rgba(0,0,0,0.1)" : "none",
+  //       }}
+  //     >
+  //       <div
+  //         style={{
+  //           color: cfg.color,
+  //           fontSize: 19,
+  //           fontWeight: 800,
+  //           fontFamily: "'Syne', sans-serif",
+  //           // Angka membesar sedikit saat hover
+  //           transform: isHovered ? "scale(1.1)" : "scale(1)",
+  //           transition: "transform 0.2s ease"
+  //         }}
+  //       >
+  //         {count}
+  //       </div>
+  //       <div
+  //         style={{
+  //           color: "rgb(0, 0, 0)",
+  //           fontSize: 11,
+  //           marginTop: 3,
+  //           letterSpacing: "0.04em",
+  //           fontWeight: isActive ? "bold" : "normal"
+  //         }}
+  //       >
+  //         {cfg.label}
+  //       </div>
+  //     </button>
+  //   );
 }
 
 function DayDot({ date, logEntry, isToday }) {
@@ -185,7 +239,14 @@ function DayDot({ date, logEntry, isToday }) {
         flex: 1,
       }}
     >
-      <div style={{ fontSize: 10, color: "rgb(12, 12, 12)", fontWeight: 600, letterSpacing: "0.06em" }}>
+      <div
+        style={{
+          fontSize: 10,
+          color: "rgb(0, 0, 0)",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+        }}
+      >
         {dayName.slice(0, 3).toUpperCase()}
       </div>
       <div
@@ -201,48 +262,92 @@ function DayDot({ date, logEntry, isToday }) {
           background: isToday
             ? "#2563eb"
             : cfg
-            ? cfg.bg
-            : "rgba(255,255,255,0.06)",
+              ? cfg.bg
+              : "rgba(219, 216, 216, 0.18)",
           border: isToday
             ? "2px solid #60a5fa"
             : cfg
-            ? `2px solid ${cfg.border}`
-            : "2px solid rgba(56, 54, 54, 0.66)",
-          color: isToday ? "#0c0c0c" : cfg ? cfg.color : isWeekend ? "rgb(5, 5, 5)" : "rgba(14, 13, 13, 0.7)",
+              ? `2px solid ${cfg.border}`
+              : "2px solid rgba(150, 148, 148, 0.92)",
+          color: isToday
+            ? "#000000"
+            : cfg
+              ? cfg.color
+              : isWeekend
+                ? "rgb(167, 163, 163)"
+                : "rgb(0, 0, 0)",
         }}
       >
         {dayNum}
       </div>
-      <div style={{ width: 6, height: 6, borderRadius: "50%", background: cfg ? cfg.color : "transparent" }} />
+      <div
+        style={{
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          background: cfg ? cfg.color : "transparent",
+        }}
+      />
     </div>
   );
 }
-
 function WarningBanner({ absenDays }) {
   if (!absenDays.length) return null;
   return (
     <div
       style={{
+        background: "rgba(255, 251, 251, 0.81)",
+        padding: "0",
         borderRadius: 14,
-        border: "1px solid rgb(248, 245, 245)",
-        background: "rgb(250, 249, 249)",
-        padding: "14px 18px",
-        display: "flex",
-        gap: 12,
-        alignItems: "flex-start",
+        width: "100%",
+        margin: "0 auto",
       }}
     >
-      <span style={{ fontSize: 20, lineHeight: 1 }}>🚨</span>
-      <div>
-        <div style={{ color: "#131212", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>
-          Peringatan Ketidakhadiran
-        </div>
-        <div style={{ color: "rgb(7, 7, 7)", fontSize: 12, lineHeight: 1.6 }}>
-          Kamu tidak hadir pada:{" "}
-          <span style={{ color: "#0c0c0c", fontWeight: 600 }}>
-            {absenDays.map((d) => `${HARI[d.getDay()]}, ${d.getDate()} ${BULAN[d.getMonth()]}`).join(" • ")}
-          </span>
-          . Segera konfirmasi ke pembimbing jika ada keterangan.
+      {/* DIV DALAM: Kartu Peringatan Merah */}
+      <div
+        style={{
+          marginTop: 0,
+          marginBottom: 0,
+          borderRadius: 14,
+          border: "1px solid rgba(247, 12, 12, 0.69)",
+          background: "rgba(239,68,68,0.12)",
+          padding: "14px 18px",
+          display: "flex",
+          gap: 12,
+          alignItems: "flex-start",
+          boxShadow:"0 2px 2px -2px rgba(0, 0, 0, 0.3), 0 4px 5px -6px rgb(175, 79, 79)",
+        }}
+      >
+        <span style={{ fontSize: 20, lineHeight: 1 }}>🚨</span>
+        <div>
+          <div
+            style={{
+              color: "#f50808",
+              fontWeight: 700,
+              fontSize: 13,
+              marginBottom: 7,
+            }}
+          >
+            Peringatan Ketidakhadiran
+          </div>
+          <div
+            style={{
+              color: "#333", // Teks hitam lebih gelap agar kontras
+              fontSize: 12,
+              lineHeight: 1.6,
+            }}
+          >
+            Kamu tidak hadir pada:{" "}
+            <span style={{ color: "#f83131", fontWeight: 700 }}>
+              {absenDays
+                .map(
+                  (d) =>
+                    `${HARI[d.getDay()]}, ${d.getDate()} ${BULAN[d.getMonth()]}`,
+                )
+                .join(" - ")}
+            </span>
+            . Segera konfirmasi ke pembimbing jika ada keterangan.
+          </div>
         </div>
       </div>
     </div>
@@ -260,39 +365,88 @@ function RecordRow({ log, index }) {
         alignItems: "center",
         padding: "14px 18px",
         borderRadius: 12,
-        background: isAbsen ? "rgb(247, 243, 243)" : "rgb(255, 255, 255)",
-        border: isAbsen ? "1px solid rgb(17, 17, 17)" : "1px solid rgb(15, 15, 15)",
+        background: isAbsen
+          ? "rgba(255, 235, 235, 0.97)"
+          : "rgba(255, 255, 255, 0.98)",
+        border: isAbsen
+          ? "1px solid rgba(185, 181, 181, 0.92)"
+          : "1px solid rgba(185, 181, 181, 0.92)",
         gap: 14,
+        boxShadow:
+          "0 4px 7px -5px rgba(247, 14, 14, 0.3), 0 3px 6px -6px rgba(0, 0, 0, 0.3)",
         animation: `fadeUp 0.3s ease ${index * 0.04}s both`,
       }}
     >
       {/* Day indicator */}
       <div style={{ minWidth: 44, textAlign: "center" }}>
-        <div style={{ fontSize: 10, color: "rgb(17, 17, 17)", fontWeight: 600, letterSpacing: "0.06em" }}>
+        <div
+          style={{
+            fontSize: 10,
+            color: "rgb(0, 0, 0)",
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+          }}
+        >
           {HARI[d.getDay()].slice(0, 3).toUpperCase()}
         </div>
-        <div style={{ fontSize: 20, fontWeight: 800, color: "#121313", lineHeight: 1, fontFamily: "'Syne', sans-serif" }}>
+        <div
+          style={{
+            fontSize: 20,
+            fontWeight: 800,
+            color: "#000000",
+            lineHeight: 1,
+            fontFamily: "'Syne', sans-serif",
+          }}
+        >
           {String(d.getDate()).padStart(2, "0")}
         </div>
-        <div style={{ fontSize: 10, color: "rgb(14, 13, 13)" }}>
+        <div style={{ fontSize: 10, color: "rgb(0, 0, 0)" }}>
           {BULAN[d.getMonth()].slice(0, 3)}
         </div>
       </div>
 
       {/* Divider */}
-      <div style={{ width: 1, height: 40, background: "rgb(255, 255, 255)" }} />
+      <div
+        style={{ width: 1, height: 40, background: "rgba(252, 244, 244, 0.1)" }}
+      />
 
       {/* Time */}
       <div style={{ minWidth: 68 }}>
         {log.status === "hadir" ? (
           <>
-            <div style={{ fontSize: 16, fontWeight: 700, color: "#1b1b1b", fontFamily: "'Syne', sans-serif" }}>
-              {new Date(log.timestamp).toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+            <div
+              style={{
+                fontSize: 16,
+                fontWeight: 700,
+                color: "rgb(20, 20, 20)",
+                fontFamily: "'Syne', sans-serif",
+              }}
+            >
+              {new Date(log.timestamp).toLocaleTimeString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
             </div>
-            <div style={{ fontSize: 10, color: "rgb(12, 12, 12)", letterSpacing: "0.05em" }}>SCAN QR</div>
+            <div
+              style={{
+                fontSize: 10,
+                color: "rgb(20, 20, 20)",
+                letterSpacing: "0.05em",
+              }}
+            >
+              SCAN QR
+            </div>
           </>
         ) : (
-          <div style={{ fontSize: 11, color: "rgb(10, 10, 10)", fontStyle: "italic" }}>—</div>
+          <div
+            style={{
+              fontSize: 11,
+              color: "rgb(20, 20, 20)",
+              fontStyle: "italic",
+            }}
+          >
+            —
+          </div>
         )}
       </div>
 
@@ -301,7 +455,14 @@ function RecordRow({ log, index }) {
 
       {/* Keterangan */}
       {log.keterangan && (
-        <div style={{ fontSize: 11, color: "rgb(8, 8, 8)", maxWidth: 140, textAlign: "right" }}>
+        <div
+          style={{
+            fontSize: 11,
+            color: "rgba(255,255,255,0.45)",
+            maxWidth: 140,
+            textAlign: "right",
+          }}
+        >
           {log.keterangan}
         </div>
       )}
@@ -411,8 +572,12 @@ export default function UserHistoryAbsensi() {
 
   // ── Filtered display list ────────────────────────────────────────────────
   const displayLogs = useMemo(() => {
-    const filtered = filterStatus ? weekLogs.filter((l) => l.status === filterStatus) : weekLogs;
-    return filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const filtered = filterStatus
+      ? weekLogs.filter((l) => l.status === filterStatus)
+      : weekLogs;
+    return filtered.sort(
+      (a, b) => new Date(b.timestamp) - new Date(a.timestamp),
+    );
   }, [weekLogs, filterStatus]);
 
   const today = new Date();
@@ -424,12 +589,12 @@ export default function UserHistoryAbsensi() {
     <>
       {/* ── Google Fonts ── */}
       <style>{`
-        @import url('@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+       @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap');
+      
+       * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-          background: #060d1f;
+          background: #1f0806;
           min-height: 100vh;
           font-family: 'Plus Jakarta Sans', sans-serif;
         }
@@ -455,112 +620,117 @@ export default function UserHistoryAbsensi() {
         }
       `}</style>
 
-      <div
-        style={{
-          minHeight: "100vh",
-          background: "linear-gradient(145deg, #060d1f 0%, #0d1b35 50%, #0a1628 100%)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* ── Background orbs ── */}
-        <div style={{
-          position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-        }}>
-          <div className="login-wrapper" />
-          <div />
-        </div>
-
-        {/* ── Content ── */}
-        <div style={{
-          position: "relative", zIndex: 1,
-          maxWidth: 680, margin: "0 auto",
-          padding: "24px 16px 60px",
-        }}>
-
+      <div className="dashboard-wrapper">
+        {/* Content Wrapper */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 1,
+            maxWidth: 680,
+            margin: "0 auto",
+            padding: "24px 16px 60px",
+            width: "100%",
+          }}
+        >
           {/* ── Header bar ── */}
-          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 28 }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 28,
+            }}
+          >
             <button
-  className="back-btn"
-  onClick={() => window.history.back()}
-  onMouseEnter={(e) => {
-    e.currentTarget.style.background = "rgba(255, 255, 255, 0.12)";
-    e.currentTarget.style.transform = "translateX(-3px)";
-    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
-    e.currentTarget.style.transform = "translateX(0)";
-    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
-  }}
-  style={{
-    background: "rgba(255, 255, 255, 0.06)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
-    borderRadius: "12px", // Sedikit lebih bulat agar modern
-    width: 42, // Sedikit lebih besar agar mudah diklik (Fitts's Law)
-    height: 42,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    cursor: "pointer",
-    color: "#ffffff",
-    fontSize: "18px",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Transisi lebih smooth
-    backdropFilter: "blur(10px)", // Efek kaca (Glassmorphism)
-    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
-    outline: "none",
-  }}
->
-  <span style={{ marginTop: "-2px" }}>←</span>
-</button>
+              className="back-btn"
+              onClick={() => window.history.back()}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.12)";
+                e.currentTarget.style.transform = "translateX(-3px)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255, 255, 255, 0.06)";
+                e.currentTarget.style.transform = "translateX(0)";
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.1)";
+              }}
+              style={{
+                background: "rgba(255, 255, 255, 0.06)",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                borderRadius: "12px", // Sedikit lebih bulat agar modern
+                width: 42, // Sedikit lebih besar agar mudah diklik (Fitts's Law)
+                height: 42,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                color: "#ffffff",
+                fontSize: "18px",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", // Transisi lebih smooth
+                backdropFilter: "blur(10px)", // Efek kaca (Glassmorphism)
+                boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+                outline: "none",
+              }}
+            >
+              <span style={{ marginTop: "-2px" }}>←</span>
+            </button>
             <div style={{ flex: 1 }}>
-              <div style={{
-                fontSize: 10, color: "rgb(255, 255, 255)",
-                letterSpacing: "0.1em", fontWeight: 600, textTransform: "uppercase",
-              }}>
+              <div
+                style={{
+                  fontSize: 10,
+                  color: "rgb(255, 255, 255)",
+                  letterSpacing: "0.1em",
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                }}
+              >
                 ABSENSI OJT BBPVP BEKASI
               </div>
-              <div style={{
-                fontSize: 18, fontWeight: 800, color: "#f1f5f9",
-                fontFamily: "'Syne', sans-serif",
-              }}>
+              <div
+                style={{
+                  fontSize: 18,
+                  fontWeight: 800,
+                  color: "#f1f5f9",
+                  fontFamily: "'Syne', sans-serif",
+                }}
+              >
                 Riwayat Kehadiran
               </div>
             </div>
-            {/* Logo badge */}
-            {/* <div style={{
-              width: 38, height: 38, borderRadius: 10,
-              background: "linear-gradient(135deg, #2563eb, #1d4ed8)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 4px 14px rgba(37,99,235,0.4)",
-              fontSize: 18,
-            }}>
-              🛡️
-            </div> */}
           </div>
 
           {/* ── Loading ── */}
           {loading && (
             <div style={{ textAlign: "center", padding: "80px 0" }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: "50%",
-                border: "3px solid rgba(37,99,235,0.2)",
-                borderTopColor: "#2563eb",
-                margin: "0 auto 16px",
-                animation: "spin 0.8s linear infinite",
-              }} />
-              <div style={{ color: "rgb(255, 255, 255)", fontSize: 14 }}>Memuat data absensi...</div>
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                  border: "3px solid rgba(37,99,235,0.2)",
+                  borderTopColor: "#2563eb",
+                  margin: "0 auto 16px",
+                  animation: "spin 0.8s linear infinite",
+                }}
+              />
+              <div style={{ color: "rgba(255,255,255,0.45)", fontSize: 14 }}>
+                Memuat data absensi...
+              </div>
             </div>
           )}
 
           {/* ── Error ── */}
           {!loading && error && (
-            <div style={{
-              padding: 24, borderRadius: 14,
-              background: "rgba(239,68,68,0.1)",
-              border: "1px solid rgba(248, 8, 8, 0.3)",
-              textAlign: "center", color: "#fca5a5",
-            }}>
+            <div
+              style={{
+                padding: 24,
+                borderRadius: 14,
+                background: "rgba(239,68,68,0.1)",
+                border: "1px solid rgba(239,68,68,0.3)",
+                textAlign: "center",
+                color: "#fca5a5",
+              }}
+            >
               {error}
             </div>
           )}
@@ -569,87 +739,141 @@ export default function UserHistoryAbsensi() {
           {!loading && !error && (
             <>
               {/* ── User profile card ── */}
-              <div style={{
-                borderRadius: 18,
-                background: "linear-gradient(135deg, rgb(241, 244, 245) 0%, rgb(240, 245, 247) 100%)",
-                border: "1px solid rgba(37,99,235,0.3)",
-                padding: "20px 22px",
-                marginBottom: 20,
-                display: "flex",
-                alignItems: "center",
-                gap: 16,
-                backdropFilter: "blur(12px)",
-              }}>
-                <div style={{
-                  width: 52, height: 52, borderRadius: 14,
-                  background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22, fontWeight: 700, color: "#0c0c0c",
-                  fontFamily: "'Syne', sans-serif",
-                  boxShadow: "0 4px 14px rgba(37,99,235,0.45)",
-                }}>
+              <div
+                style={{
+                  borderRadius: 18,
+                  background:
+                    "linear-gradient(135deg, rgb(220, 240, 247) 0%, rgb(220, 240, 247) 100%)",
+                  border: "1px solid rgba(12, 88, 253, 0.3)",
+                  padding: "20px 22px",
+                  marginBottom: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 16,
+                  backdropFilter: "blur(12px)",
+                }}
+              >
+                <div
+                  style={{
+                    width: 52,
+                    height: 52,
+                    borderRadius: 14,
+                    background: "linear-gradient(135deg, #2563eb, #0ea5e9)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 22,
+                    fontWeight: 700,
+                    color: "#0c0c0c",
+                    fontFamily: "'Syne', sans-serif",
+                    boxShadow: "0 4px 14px rgba(37,99,235,0.45)",
+                  }}
+                >
                   {userName.charAt(0).toUpperCase()}
                 </div>
                 <div style={{ flex: 1 }}>
-                  <div style={{
-                    fontSize: 18, fontWeight: 800, color: "#050505",
-                    fontFamily: "'Syne', sans-serif",
-                  }}>
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 800,
+                      color: "#050505",
+                      fontFamily: "'Syne', sans-serif",
+                    }}
+                  >
                     {userName}
                   </div>
-                  <div style={{ fontSize: 12, color: "rgb(8, 8, 8)", marginTop: 2 }}>
-                    Peserta OJT · {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "rgb(8, 8, 8)",
+                      marginTop: 2,
+                    }}
+                  >
+                    Peserta OJT ·{" "}
+                    {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 10, color: "rgb(15, 15, 15)", letterSpacing: "0.08em" }}>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      color: "rgb(15, 15, 15)",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
                     HARI INI
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "#080808", marginTop: 2 }}>
-                    {HARI[today.getDay()]}, {today.getDate()} {BULAN[today.getMonth()]}
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "#080808",
+                      marginTop: 2,
+                    }}
+                  >
+                    {HARI[today.getDay()]}, {today.getDate()}{" "}
+                    {BULAN[today.getMonth()]}
                   </div>
                 </div>
               </div>
 
               {/* ── Week Navigator ── */}
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 10,
-                marginBottom: 16,
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 16,
+                }}
+              >
                 <button
                   className="week-btn"
                   onClick={() => setWeekOffset((o) => o - 1)}
                   style={{
-                    background: "rgb(255, 255, 255)",
-                    border: "1px solid rgba(3, 3, 3, 0.1)",
+                    background: "rgba(255, 251, 251, 0.81)",
+                    border: "1px solid rgba(238, 238, 238, 0.96)",
                     borderRadius: 10,
-                    width: 36, height: 36,
+                    width: 36,
+                    height: 36,
                     cursor: "pointer",
-                    color: "#0c0c0c", fontSize: 20,
-                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "#000000",
+                    fontSize: 17,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     transition: "all 0.2s",
                   }}
                 >
                   ‹
                 </button>
 
-                <div style={{
-                  flex: 1,
-                  textAlign: "center",
-                  background: "rgb(255, 255, 255)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: 10,
-                  padding: "8px 16px",
-                }}>
-                  <div style={{
-                    fontSize: 13, fontWeight: 700, color: "#0f0f0f",
-                    fontFamily: "'Syne', sans-serif",
-                  }}>
+                <div
+                  style={{
+                    flex: 1,
+                    textAlign: "center",
+                    background: "rgba(255, 251, 251, 0.81)",
+                    border: "1px solid rgba(238, 238, 238, 0.96)",
+                    borderRadius: 10,
+                    padding: "8px 16px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "#000000",
+                      fontFamily: "'Syne', sans-serif",
+                    }}
+                  >
                     {isCurrentWeek ? "🗓 Minggu Ini" : `Minggu ke-${weekNum}`}
                   </div>
-                  <div style={{ fontSize: 11, color: "rgb(8, 8, 8)", marginTop: 1 }}>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "rgb(0, 0, 0)",
+                      marginTop: 1,
+                    }}
+                  >
                     {formatDate(weekStart)} – {formatDate(weekEnd)}
                   </div>
                 </div>
@@ -659,14 +883,19 @@ export default function UserHistoryAbsensi() {
                   onClick={() => setWeekOffset((o) => Math.min(0, o + 1))}
                   disabled={isCurrentWeek}
                   style={{
-                    background: isCurrentWeek ? "rgb(255, 255, 255)" : "rgb(255, 252, 252)",
-                    border: "1px solid rgba(255,255,255,0.1)",
+                    background: isCurrentWeek
+                      ? "rgba(255, 251, 251, 0.81)"
+                      : "rgba(255, 251, 251, 0.81)",
+                    border: "1px solid rgba(238, 238, 238, 0.96)",
                     borderRadius: 10,
-                    width: 36, height: 36,
+                    width: 36,
+                    height: 36,
                     cursor: isCurrentWeek ? "not-allowed" : "pointer",
-                    color: isCurrentWeek ? "rgb(250, 247, 247)" : "#0f0f0f",
-                    fontSize: 20,
-                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: isCurrentWeek ? "rgb(0, 0, 0)" : "#000000",
+                    fontSize: 17,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     transition: "all 0.2s",
                   }}
                 >
@@ -675,33 +904,35 @@ export default function UserHistoryAbsensi() {
               </div>
 
               {/* ── Mini calendar strip ── */}
-              <div style={{
-                borderRadius: 16,
-                background: "rgb(255, 255, 255)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                padding: "16px 12px",
-                display: "flex",
-                justifyContent: "space-around",
-                marginBottom: 20,
-                backdropFilter: "blur(8px)",
-              }}>
+              <div
+                style={{
+                  borderRadius: 16,
+                  background: "rgba(255, 251, 251, 0.81)",
+                  border: "1px solid rgba(238, 238, 238, 0.96)",
+                  padding: "16px 12px",
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginBottom: 0,
+                  backdropFilter: "blur(8px)",
+                }}
+              >
                 {weekDays.map((d, i) => {
-                  const entry = weekLogs.find((l) => sameDay(isoToDate(l.timestamp), d));
+                  const entry = weekLogs.find((l) =>
+                    sameDay(isoToDate(l.timestamp), d),
+                  );
                   return (
-                    <DayDot key={i} date={d} logEntry={entry} isToday={sameDay(d, today)} />
+                    <DayDot
+                      key={i}
+                      date={d}
+                      logEntry={entry}
+                      isToday={sameDay(d, today)}
+                    />
                   );
                 })}
               </div>
 
-              {/* ── Warning banner ── */}
-              {absenDays.length > 0 && (
-                <div style={{ marginBottom: 20 }}>
-                  <WarningBanner absenDays={absenDays} />
-                </div>
-              )}
-
               {/* ── Stats cards ── */}
-              <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+              <div style={{ display: "flex", gap: 10, marginBottom: 8 }}>
                 {["hadir", "izin", "absen"].map((s) => (
                   <StatCard
                     key={s}
@@ -709,22 +940,31 @@ export default function UserHistoryAbsensi() {
                     label={STATUS[s].label}
                     count={stats[s]}
                     isActive={filterStatus === s}
-                    onClick={() => setFilterStatus(filterStatus === s ? null : s)}
+                    onClick={() =>
+                      setFilterStatus(filterStatus === s ? null : s)
+                    }
                   />
                 ))}
               </div>
 
-              {/* ── Filter label ── */}
+              {/* ── Filter label ──
               {filterStatus && (
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  marginBottom: 12,
-                }}>
-                  <div style={{ fontSize: 12, color: "rgb(255, 255, 255)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginBottom: 12,
+                  }}
+                >
+                  <div style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.86)" }}>
                     Filter aktif:{" "}
-                    <span style={{ color: STATUS[filterStatus].color, fontWeight: 600 }}>
+                    <span
+                      style={{
+                        color: STATUS[filterStatus].color,
+                        fontWeight: 600,
+                      }}
+                    >
                       {STATUS[filterStatus].label}
                     </span>
                   </div>
@@ -733,7 +973,7 @@ export default function UserHistoryAbsensi() {
                     style={{
                       background: "none",
                       border: "none",
-                      color: "rgb(255, 255, 255)",
+                      color: "rgba(243, 154, 154, 0.85)",
                       cursor: "pointer",
                       fontSize: 12,
                     }}
@@ -741,46 +981,73 @@ export default function UserHistoryAbsensi() {
                     Hapus filter ✕
                   </button>
                 </div>
-              )}
+              )} */}
 
               {/* ── Records list ── */}
-              <div style={{
-                borderRadius: 16,
-                background: "rgb(255, 255, 255)",
-                border: "1px solid rgb(8, 8, 8)",
-                overflow: "hidden",
-              }}>
-                <div style={{
-                  padding: "14px 18px 12px",
-                  borderBottom: "1px solid rgb(7, 7, 7)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}>
-                  <div style={{
-                    fontSize: 13,
-                    fontWeight: 700,
-                    color: "#0c0c0c",
-                    fontFamily: "'Syne', sans-serif",
-                  }}>
+              <div
+                style={{
+                  marginTop: 0,
+                  borderRadius: 16,
+                  background: "rgba(255, 251, 251, 0.81)",
+                  border: "1px solid rgba(32, 32, 32, 0.92)",
+                  overflow: "hidden",
+                  boxShadow:
+                    "0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)",
+                }}
+              >
+                <div
+                  style={{
+                    padding: "14px 18px 12px",
+                    borderBottom: "1px solid rgba(248, 246, 246, 0.49)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: "#000000",
+                      fontFamily: "'Syne', sans-serif",
+                    }}
+                  >
                     Log Kehadiran
                   </div>
-                  <div style={{
-                    fontSize: 11,
-                    color: "rgb(8, 8, 8)",
-                  }}>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: "rgb(0, 0, 0)",
+                    }}
+                  >
                     {displayLogs.length} catatan
                   </div>
                 </div>
 
-                <div style={{ padding: "12px", display: "flex", flexDirection: "column", gap: 8 }}>
+                {/* ── Warning banner (langsung di bawah header card) ── */}
+                {absenDays.length > 0 && (
+                  <div style={{ padding: "12px 12px 0" }}>
+                    <WarningBanner absenDays={absenDays} />
+                  </div>
+                )}
+
+                <div
+                  style={{
+                    padding: "12px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                  }}
+                >
                   {displayLogs.length === 0 ? (
-                    <div style={{
-                      textAlign: "center",
-                      padding: "40px 20px",
-                      color: "rgb(255, 255, 255)",
-                      fontSize: 13,
-                    }}>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "40px 20px",
+                        color: "rgb(0, 0, 0)",
+                        fontSize: 13,
+                      }}
+                    >
                       <div style={{ fontSize: 32, marginBottom: 10 }}>📋</div>
                       Tidak ada data untuk minggu ini.
                     </div>
@@ -793,20 +1060,34 @@ export default function UserHistoryAbsensi() {
               </div>
 
               {/* ── Legend ── */}
-              <div style={{
-                display: "flex",
-                gap: 16,
-                justifyContent: "center",
-                marginTop: 24,
-                flexWrap: "wrap",
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  justifyContent: "center",
+                  marginTop: 24,
+                  flexWrap: "wrap",
+                }}
+              >
                 {Object.entries(STATUS).map(([key, cfg]) => (
-                  <div key={key} style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <div style={{
-                      width: 8, height: 8, borderRadius: "50%",
-                      background: cfg.color,
-                    }} />
-                    <span style={{ fontSize: 11, color: "rgb(255, 255, 255)" }}>
+                  <div
+                    key={key}
+                    style={{ display: "flex", alignItems: "center", gap: 6 }}
+                  >
+                    <div
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        background: cfg.color,
+                      }}
+                    />
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: "rgba(255, 255, 255, 0.83)",
+                      }}
+                    >
                       {cfg.label}
                     </span>
                   </div>
