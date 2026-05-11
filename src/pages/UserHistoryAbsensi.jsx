@@ -49,7 +49,7 @@ function getWeekNumber(date) {
       ((d.getTime() - week1.getTime()) / 86400000 -
         3 +
         ((week1.getDay() + 6) % 7)) /
-        7,
+      7,
     )
   );
 }
@@ -685,37 +685,65 @@ export default function UserHistoryAbsensi() {
                       className="stat-pill"
                       onClick={() => setFilterStatus(filterStatus === s ? null : s)}
                       style={{
+                        position: "relative",
+                        overflow: "hidden",
+
                         flex: 1,
                         padding: "10px 8px",
                         borderRadius: 12,
+
                         border: isActive
-                          ? `2px solid ${cfg.color}`
-                          : "1px solid rgba(238,238,238,0.96)",
-                        background: isActive ? cfg.bg : "rgba(255,251,251,0.81)",
+                          ? `1.5px solid ${cfg.border}`
+                          : "1px solid rgb(238, 238, 238)",
+
+                        background: "rgb(255, 255, 255)",
+
+                        boxShadow: isActive
+                          ? `0 0 18px -8px ${cfg.color}`
+                          : "0 2px 6px rgba(0,0,0,0.04)",
+
                         cursor: "pointer",
                         textAlign: "center",
-                        transition: "all 0.2s ease",
+                        transition: "all 0.25s ease",
+
+                        transform: isActive
+                          ? "translateY(-2px)"
+                          : "translateY(0)",
                       }}
                     >
-                      <div
-                        style={{
-                          color: cfg.color,
-                          fontSize: 19,
-                          fontWeight: 800,
-                          fontFamily: "'Syne', sans-serif",
-                        }}
-                      >
-                        {totalStats[s]}
-                      </div>
-                      <div
-                        style={{
-                          color: "#000",
-                          fontSize: 11,
-                          marginTop: 3,
-                          fontWeight: isActive ? 700 : 400,
-                        }}
-                      >
-                        {cfg.label}
+                      {isActive && (
+                        <div
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: cfg.color,
+                            opacity: 0.18,
+                            zIndex: 0,
+                          }}
+                        />
+                      )}
+                      <div style={{ position: "relative", zIndex: 1 }}>
+                        <div
+                          style={{
+                            color: cfg.color,
+                            fontSize: 19,
+                            fontWeight: 800,
+                            fontFamily: "'Syne', sans-serif",
+                          }}
+                        >
+                          {totalStats[s]}
+                        </div>
+
+                        <div
+                          style={{
+                            color: "#000",
+                            fontSize: 11,
+                            marginTop: 3,
+                            fontWeight: isActive ? 700 : 400,
+                          }}
+                        >
+                          {cfg.label}
+                        </div>
                       </div>
                     </button>
                   );
