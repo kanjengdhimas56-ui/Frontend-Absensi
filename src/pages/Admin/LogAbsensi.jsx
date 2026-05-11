@@ -9,7 +9,6 @@ export default function LogAbsensi({ token, onLogout }) {
   const [error, setError] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [lastFetch, setLastFetch] = useState(null);
-
   const navigate = useNavigate();
 
   const fetchLogs = useCallback(async () => {
@@ -34,6 +33,16 @@ export default function LogAbsensi({ token, onLogout }) {
       setLoading(false);
     }
   }, [token, onLogout]);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "hadir": return "success";
+      case "izin": return "warning";
+      case "sakit": return "warning";
+      case "alpha": return "danger";
+      default: return "secondary";
+    }
+  };
 
   useEffect(() => {
     fetchLogs();
@@ -215,6 +224,7 @@ export default function LogAbsensi({ token, onLogout }) {
                     <th><i className="bi bi-person me-1" style={{ color: "#60a5fa" }}></i>Nama</th>
                     <th><i className="bi bi-telephone me-1" style={{ color: "#60a5fa" }}></i>No. Telepon</th>
                     <th><i className="bi bi-mortarboard me-1" style={{ color: "#60a5fa" }}></i>Jurusan</th>
+                    <th><i className="bi bi-info-circle me-1" style={{ color: "#60a5fa" }}></i>Keterangan</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -229,6 +239,11 @@ export default function LogAbsensi({ token, onLogout }) {
                       <td style={{ color: "rgba(0, 0, 0, 1)" }}>{log.username || "-"}</td>
                       <td style={{ color: "rgba(0, 0, 0, 0.75)" }}>{log.no_hp || "-"}</td>
                       <td style={{ color: "rgba(0, 0, 0, 0.75)" }}>{log.nama_jurusan || "-"}</td>
+                      <td>
+                        <span className={`badge bg-${getStatusColor(log.status)}`}>
+                          {log.status || "-"}
+                        </span>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

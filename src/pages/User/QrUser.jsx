@@ -70,6 +70,13 @@ export default function QrUser() {
       cancelButtonText: "Batal",
       confirmButtonColor: "#f39c12",
       denyButtonColor: "#f39c12",
+      cancelButtonColor: "#7f8c8d",
+      width: "350px",
+      customClass: {
+        icon: 'swal2-small-icon',
+        title: 'swal2-small-title',
+        content: 'swal2-small-text'
+      }
     }).then((result) => {
       let status = "";
 
@@ -115,7 +122,6 @@ export default function QrUser() {
   return (
     <div
       className="login-wrapper position-relative"
-      style={{ paddingTop: "80px" }}
     >
       <div
         className="login-card"
