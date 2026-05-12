@@ -23,6 +23,10 @@ export default function ScannerQr({ token }) {
 
     const handleRefresh = () => {
         setIsRefreshing(true)
+        setScanResult("")
+        setMessage("")
+        setStatus("")
+        setIsExiting(false)
         window.location.reload();
     };
 
@@ -42,6 +46,9 @@ export default function ScannerQr({ token }) {
         } catch (err) {
             setMessage(err.response?.data?.message || "Terjadi kesalahan")
             setStatus("error")
+        } finally {
+            setIsLoading(false)
+            setIsRefreshing(false)
         }
     }
 
