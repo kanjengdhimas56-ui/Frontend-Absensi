@@ -18,7 +18,8 @@
     "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^7.15.0",
     "sweetalert2": "^11.26.24",
-    "sweetalert2-react-content": "^5.1.2"
+    "sweetalert2-react-content": "^5.1.2",
+    "webrtc-adapter": "^9.0.5"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",

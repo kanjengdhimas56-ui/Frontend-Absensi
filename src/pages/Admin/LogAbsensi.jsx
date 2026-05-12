@@ -15,7 +15,7 @@ export default function LogAbsensi({ token, onLogout }) {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.get("http://103.247.10.115:3050/api/admin-only/log", {
+      const res = await axios.get("https://103.247.10.115:3050/api/admin-only/log", {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -78,7 +78,7 @@ export default function LogAbsensi({ token, onLogout }) {
         <span className="navbar-brand d-flex align-items-center gap-2">
           <i className="bi bi-clipboard2-check-fill"></i>
           <span className="brand-text">Daftar Absen</span>
-          <span className="badge bg-warning text-dark ms-2 badge-admin">Admin</span>
+          <span className="badge bg-warning text-dark ms-2 hide-on-small">Admin</span>
         </span>
         <div className="ms-auto d-flex align-items-center gap-3">
           {lastFetch && (

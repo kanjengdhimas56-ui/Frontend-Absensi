@@ -25,7 +25,7 @@ export default function AuthLogin({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    axios.post("http://103.247.10.115:3050/api/auth/login", form)
+    axios.post("https://103.247.10.115:3050/api/auth/login", form)
       .then((res) => {
         localStorage.setItem("x_token", res.data.token);
         localStorage.setItem("user_role", res.data.user.role_id);
