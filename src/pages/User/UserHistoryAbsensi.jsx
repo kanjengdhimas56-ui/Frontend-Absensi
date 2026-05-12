@@ -71,6 +71,7 @@ const STATUS = {
     border: "rgba(34,197,94,0.35)",
     icon: "✓",
   },
+
   izin: {
     label: "Izin",
     color: "#f59e0b",
@@ -78,10 +79,19 @@ const STATUS = {
     border: "rgba(245,158,11,0.35)",
     icon: "⚠",
   },
-  absen: {
-    label: "Tidak Hadir",
+
+  sakit: {
+    label: "Sakit",
+    color: "#f59e0b",
+    bg: "rgba(245,158,11,0.12)",
+    border: "rgba(245,158,11,0.35)",
+    icon: "⛨",
+  },
+
+  alpha: {
+    label: "Alpha",
     color: "#ef4444",
-    bg: "rgba(250, 0, 0, 0.12)",
+    bg: "rgba(239,68,68,0.12)",
     border: "rgba(239,68,68,0.35)",
     icon: "✗",
   },
@@ -239,7 +249,7 @@ function WarningBanner({ absenDays }) {
 
 function RecordRow({ log, index }) {
   const d = isoToDate(log.absen);
-  const isAbsen = log.status === "absen";
+  const isAbsen = log.status === "alpha";
 
   return (
     <div
@@ -420,11 +430,11 @@ export default function UserHistoryAbsensi() {
       .filter((d) => d.getDay() !== 0 && d.getDay() !== 6)
       .filter((d) => {
         const entry = weekLogs.find((l) => sameDay(isoToDate(l.absen), d));
-        return entry && entry.status === "absen";
+        return entry && entry.status === "alpha";
       });
   }, [weekDays, weekLogs]);
   const totalStats = useMemo(() => {
-    const counts = { hadir: 0, izin: 0, absen: 0 };
+    const counts = { hadir: 0, izin: 0, sakit: 0, alpha: 0 };
     logs.forEach((l) => {
       if (counts[l.status] !== undefined) counts[l.status]++;
     });
@@ -621,7 +631,8 @@ export default function UserHistoryAbsensi() {
                   style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "1em"
+                    gap: "1em",
+                    width: "100%"
                   }}
                 >
                   <div
@@ -687,7 +698,7 @@ export default function UserHistoryAbsensi() {
                 </div>
               </div>
               <div style={{ display: "flex", gap: 10, marginBottom: 18 }}>
-                {["hadir", "izin", "absen"].map((s) => {
+                {["hadir", "izin", "sakit", "alpha"].map((s) => {
                   const cfg = STATUS[s];
                   const isActive = filterStatus === s;
                   return (
