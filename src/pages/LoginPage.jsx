@@ -25,7 +25,7 @@ export default function AuthLogin({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsLoading(true);
-    axios.post("https://103.247.10.115:3050/api/auth/login", form)
+    axios.post("https://api.zexdv.cloud/api/auth/login", form)
       .then((res) => {
         localStorage.setItem("x_token", res.data.token);
         localStorage.setItem("user_role", res.data.user.role_id);
@@ -90,7 +90,7 @@ export default function AuthLogin({ onLogin }) {
               <input
                 type="text"
                 name="username"
-                className="form-control"
+                className="form-control text-on-small"
                 placeholder="Masukkan nama lengkap"
                 value={form.username}
                 onChange={handleChange}
@@ -109,7 +109,7 @@ export default function AuthLogin({ onLogin }) {
               <input
                 type="password"
                 name="pin"
-                className="form-control"
+                className="form-control text-on-small"
                 placeholder="Masukkan PIN"
                 value={form.pin}
                 onChange={handleChange}

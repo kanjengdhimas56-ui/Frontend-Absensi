@@ -26,7 +26,7 @@ function HalamanUser({ token, onLogout }) {
         }
 
         axios
-            .get("https://103.247.10.115:3050/api/auth/get-profile", {
+            .get("https://api.zexdv.cloud/api/auth/get-profile", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -57,7 +57,7 @@ function HalamanUser({ token, onLogout }) {
         setError(""); // reset error biar clean
         axios
             .put(
-                "https://103.247.10.115:3050/api/auth/update-pin",
+                "https://api.zexdv.cloud/api/auth/update-pin",
                 {
                     oldPin: oldPin,
                     newPin: newPin,
@@ -214,7 +214,7 @@ function HalamanUser({ token, onLogout }) {
                                         </span>
                                         <input
                                             type="password"
-                                            className="form-control"
+                                            className="form-control text-on-small"
                                             placeholder="Masukkan PIN lama"
                                             value={oldPin}
                                             onChange={(e) => setOldPin(e.target.value)}
@@ -228,7 +228,7 @@ function HalamanUser({ token, onLogout }) {
                                         </span>
                                         <input
                                             type="password"
-                                            className="form-control"
+                                            className="form-control text-on-small"
                                             placeholder="Masukkan PIN baru"
                                             value={newPin}
                                             onChange={(e) => setNewPin(e.target.value)}

@@ -6,9 +6,9 @@ import SweetAlert2 from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 export default function QrUser() {
-  const BASE_URL = "https://103.247.10.115:3050/api/kode-qr/qr";
-  const USER_URL = "https://103.247.10.115:3050/api/auth/get-profile";
-  const IZIN_URL = "https://103.247.10.115:3050/api/user-akses/izin";
+  const BASE_URL = "https://api.zexdv.cloud/api/kode-qr/qr";
+  const USER_URL = "https://api.zexdv.cloud/api/auth/get-profile";
+  const IZIN_URL = "https://api.zexdv.cloud/api/user-akses/izin";
   const MySwal = withReactContent(SweetAlert2);
   const token = localStorage.getItem("x_token");
   const [form, setForm] = useState({ username: "" });
@@ -147,15 +147,19 @@ export default function QrUser() {
             <strong>{form.username || "..."}</strong>
           </p>
 
-          <div className="qr-code">
-            {qrData ? (
-              <QRCode
-                value={qrData}
-                size={180}
-              />
-            ) : (
-              <p>Loading QR...</p>
-            )}
+          <div className="qr-wrapper">
+            <div className="qr-code">
+              {qrData ? (
+                <QRCode
+                  value={qrData}
+                  size={180}
+                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                  viewBox={`0 0 256 256`}
+                />
+              ) : (
+                <p>Loading QR...</p>
+              )}
+            </div>
           </div>
 
           <p className="qr-instruction">
