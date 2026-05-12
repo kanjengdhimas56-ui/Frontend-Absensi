@@ -386,6 +386,15 @@ body {
   text-align: center;
 }
 
+/* UserHistoryAbsensi */
+.profile-header {
+  font-size: 16px;
+}
+
+.record-row {
+  font-size: 16px;
+}
+
 /* ANIMATIONS */
 @keyframes spin {
   from {
@@ -463,9 +472,26 @@ body {
     padding: 0.75rem 1rem;
   }
 }
-@media (max-width: 320px) {
+@media (max-width: 400px) {
   .hide-on-small {
     display: none !important;
+  }
+  .profile-header {
+    font-size: 14px;
+  }
+  .record-row {
+    font-size: 13px;
+  }
+}
+@media (max-width: 360px) {
+  .qr-code {
+    width: 160px;
+    padding: 0.75rem;
+  }
+}
+@media (max-width: 350px) {
+  .text-on-small {
+    font-size: 0.75rem !important;
   }
 }
 
@@ -492,6 +518,13 @@ body {
   margin: 2rem auto;
   max-width: 320px;
   text-align: center;
+}
+
+.qr-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .qr-card .qr-code {

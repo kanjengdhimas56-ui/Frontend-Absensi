@@ -32,7 +32,7 @@ export default function ScannerQr({ token }) {
             setIsLoading(true)
             setMessage("")
 
-            const response = await axios.post("https://103.247.10.115:3050/api/scanner/scan",
+            const response = await axios.post("https://api.zexdv.cloud/api/scanner/scan",
                 { qr: qrValue },
                 { headers: { Authorization: `Bearer ${token}` } }
             )

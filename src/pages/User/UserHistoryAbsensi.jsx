@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
-const BASE_URL = "https://103.247.10.115:3050";
+const BASE_URL = "https://api.zexdv.cloud";
 
 const HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const BULAN = [
@@ -95,9 +95,9 @@ function StatusBadge({ status }) {
         display: "inline-flex",
         alignItems: "center",
         gap: 5,
-        padding: "4px 12px",
-        borderRadius: 20,
-        fontSize: 12,
+        padding: "0.25em 0.75em",
+        borderRadius: "1.25em",
+        fontSize: "0.75em",
         fontWeight: 700,
         letterSpacing: "0.03em",
         color: cfg.color,
@@ -105,7 +105,7 @@ function StatusBadge({ status }) {
         border: `1px solid ${cfg.border}`,
       }}
     >
-      <span style={{ fontSize: 11 }}>{cfg.icon}</span>
+      <span style={{ fontSize: "0.6875em" }}>{cfg.icon}</span>
       {cfg.label}
     </span>
   );
@@ -243,25 +243,27 @@ function RecordRow({ log, index }) {
 
   return (
     <div
+      className="record-row"
       style={{
         display: "flex",
         alignItems: "center",
-        padding: "14px 18px",
+        justifyContent: "center",
+        padding: "0.875em 1.125em",
         borderRadius: 12,
         background: isAbsen
           ? "rgba(255, 235, 235, 0.97)"
-          : "rgba(255, 255, 255, 0.98)",
+          : "rgba(255, 255, 255, 0.97)",
         border: "1px solid rgba(185, 181, 181, 0.92)",
-        gap: 14,
+        gap: "0.875em",
         boxShadow:
           "0 4px 7px -5px rgba(247, 14, 14, 0.3), 0 3px 6px -6px rgba(0, 0, 0, 0.3)",
         animation: `fadeUp 0.3s ease ${index * 0.04}s both`,
       }}
     >
-      <div style={{ minWidth: 44, textAlign: "center" }}>
+      <div style={{ minWidth: "2.75em", textAlign: "center" }}>
         <div
           style={{
-            fontSize: 10,
+            fontSize: "0.625em",
             color: "rgb(0, 0, 0)",
             fontWeight: 600,
             letterSpacing: "0.06em",
@@ -271,7 +273,7 @@ function RecordRow({ log, index }) {
         </div>
         <div
           style={{
-            fontSize: 20,
+            fontSize: "1.25em",
             fontWeight: 800,
             color: "#000000",
             lineHeight: 1,
@@ -280,19 +282,19 @@ function RecordRow({ log, index }) {
         >
           {String(d.getDate()).padStart(2, "0")}
         </div>
-        <div style={{ fontSize: 10, color: "rgb(0, 0, 0)" }}>
+        <div style={{ fontSize: "0.625em", color: "rgb(0, 0, 0)" }}>
           {BULAN[d.getMonth()].slice(0, 3)}
         </div>
       </div>
 
-      <div style={{ width: 1, height: 40, background: "rgba(200, 200, 200, 0.4)" }} />
+      <div style={{ width: 1, height: "2.5em", background: "rgba(200, 200, 200, 0.4)" }} />
 
-      <div style={{ minWidth: 68 }}>
+      <div style={{ minWidth: "4.25em" }}>
         {log.status === "hadir" ? (
           <>
             <div
               style={{
-                fontSize: 16,
+                fontSize: "1em",
                 fontWeight: 700,
                 color: "rgb(20, 20, 20)",
                 fontFamily: "'Syne', sans-serif",
@@ -305,7 +307,7 @@ function RecordRow({ log, index }) {
             </div>
             <div
               style={{
-                fontSize: 10,
+                fontSize: "0.625em",
                 color: "rgb(20, 20, 20)",
                 letterSpacing: "0.05em",
               }}
@@ -314,7 +316,7 @@ function RecordRow({ log, index }) {
             </div>
           </>
         ) : (
-          <div style={{ fontSize: 11, color: "rgb(20, 20, 20)", fontStyle: "italic" }}>
+          <div style={{ fontSize: "0.6875em", color: "rgb(20, 20, 20)", fontStyle: "italic" }}>
             —
           </div>
         )}
@@ -325,9 +327,9 @@ function RecordRow({ log, index }) {
       {log.keterangan && (
         <div
           style={{
-            fontSize: 11,
+            fontSize: "0.6875em",
             color: "rgba(100,100,100,0.8)",
-            maxWidth: 140,
+            maxWidth: "8.75em",
             textAlign: "right",
           }}
         >
@@ -337,7 +339,7 @@ function RecordRow({ log, index }) {
 
       <StatusBadge status={log.status} />
 
-      {isAbsen && <span style={{ fontSize: 16 }}>⚠️</span>}
+      {isAbsen && <span style={{ fontSize: "1em" }}>⚠️</span>}
     </div>
   );
 }
@@ -615,58 +617,67 @@ export default function UserHistoryAbsensi() {
                 }}
               >
                 <div
+                  className="profile-header"
                   style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 14,
-                    background: "linear-gradient(135deg, #0284c7, #0ea5e9)",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 22,
-                    fontWeight: 700,
-                    color: "#fff",
-                    fontFamily: "'Syne', sans-serif",
-                    boxShadow: "0 4px 14px rgba(2,132,199,0.45)",
+                    gap: "1em"
                   }}
                 >
-                  {userName.charAt(0).toUpperCase()}
-                </div>
-                <div style={{ flex: 1 }}>
                   <div
                     style={{
-                      fontSize: 18,
-                      fontWeight: 800,
-                      color: "#050505",
+                      width: "3.25em",
+                      height: "3.25em",
+                      borderRadius: "0.875em",
+                      background: "linear-gradient(135deg, #0284c7, #0ea5e9)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: "1.375em",
+                      fontWeight: 700,
+                      color: "#fff",
                       fontFamily: "'Syne', sans-serif",
+                      boxShadow: "0 0.25em 0.875em rgba(2,132,199,0.45)",
                     }}
                   >
-                    {userName}
+                    {userName.charAt(0).toUpperCase()}
                   </div>
-                  <div style={{ fontSize: 12, color: "rgb(8, 8, 8)", marginTop: 2 }}>
-                    Peserta OJT · {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: "1.125em",
+                        fontWeight: 800,
+                        color: "#050505",
+                        fontFamily: "'Syne', sans-serif",
+                      }}
+                    >
+                      {userName}
+                    </div>
+                    <div style={{ fontSize: "0.75em", color: "rgb(8, 8, 8)", marginTop: "0.125em" }}>
+                      Peserta OJT · {userInfo?.jurusan || "PT. Geo Mandiri Kreasi"}
+                    </div>
                   </div>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <div
-                    style={{
-                      fontSize: 10,
-                      color: "rgb(15, 15, 15)",
-                      letterSpacing: "0.08em",
-                    }}
-                  >
-                    HARI INI
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: "#080808",
-                      marginTop: 2,
-                    }}
-                  >
-                    {HARI[today.getDay()]}, {today.getDate()}{" "}
-                    {BULAN[today.getMonth()]}
+                  <div style={{ textAlign: "right" }}>
+                    <div
+                      style={{
+                        fontSize: "0.625em",
+                        color: "rgb(15, 15, 15)",
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      HARI INI
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "0.8125em",
+                        fontWeight: 600,
+                        color: "#080808",
+                        marginTop: "0.125em",
+                      }}
+                    >
+                      {HARI[today.getDay()]}, {today.getDate()}{" "}
+                      {BULAN[today.getMonth()]}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -979,7 +990,7 @@ export default function UserHistoryAbsensi() {
             </>
           )}
         </div>
-      </div>
+      </div >
     </>
   );
 }
