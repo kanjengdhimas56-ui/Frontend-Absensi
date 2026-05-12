@@ -6,9 +6,9 @@ import SweetAlert2 from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 export default function QrUser() {
-  const BASE_URL = "http://103.247.10.115:3050/api/kode-qr/qr";
-  const USER_URL = "http://103.247.10.115:3050/api/auth/get-profile";
-  const IZIN_URL = "http://103.247.10.115:3050/api/user-akses/izin";
+  const BASE_URL = "https://103.247.10.115:3050/api/kode-qr/qr";
+  const USER_URL = "https://103.247.10.115:3050/api/auth/get-profile";
+  const IZIN_URL = "https://103.247.10.115:3050/api/user-akses/izin";
   const MySwal = withReactContent(SweetAlert2);
   const token = localStorage.getItem("x_token");
   const [form, setForm] = useState({ username: "" });

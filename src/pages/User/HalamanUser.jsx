@@ -26,7 +26,7 @@ function HalamanUser({ token, onLogout }) {
         }
 
         axios
-            .get("http://103.247.10.115:3050/api/auth/get-profile", {
+            .get("https://103.247.10.115:3050/api/auth/get-profile", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -57,7 +57,7 @@ function HalamanUser({ token, onLogout }) {
         setError(""); // reset error biar clean
         axios
             .put(
-                "http://103.247.10.115:3050/api/auth/update-pin",
+                "https://103.247.10.115:3050/api/auth/update-pin",
                 {
                     oldPin: oldPin,
                     newPin: newPin,

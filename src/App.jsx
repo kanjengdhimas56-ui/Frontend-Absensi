@@ -4,7 +4,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import LogAbsensi from "./pages/Admin/LogAbsensi";
 import HalamanUser from "./pages/User/HalamanUser";
-import UserHistoryAbsensi from "./pages/UserHistoryAbsensi";
+import UserHistoryAbsensi from "./pages/User/UserHistoryAbsensi";
 import QrUser from "./pages/User/QrUser";
 import ScannerQr from "./pages/Admin/ScannerQr";
 import Swal from "sweetalert2";

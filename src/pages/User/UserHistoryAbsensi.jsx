@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 
-const BASE_URL = "http://103.247.10.115:3050";
+const BASE_URL = "https://103.247.10.115:3050";
 
 const HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const BULAN = [
