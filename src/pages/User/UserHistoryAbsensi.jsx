@@ -443,7 +443,7 @@ export default function UserHistoryAbsensi() {
 
   const displayLogs = useMemo(() => {
     const filtered = filterStatus
-      ? weekLogs.filter((l) => l.status === filterStatus)
+      ? weekLogs.filter((l) => l.status === filterStatus?.toLowerCase().trim())
       : weekLogs;
     return filtered.sort(
       (a, b) => new Date(b.absen) - new Date(a.absen),
